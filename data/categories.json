@@ -1,0 +1,78 @@
+[
+    {
+        "label": "Jewellery",
+        "value": "jewellery"
+    },
+    {
+        "label": "Watches",
+        "value": "watches"
+    },
+    {
+        "label": "Gems",
+        "value": "gems"
+    },
+    {
+        "label": "Lether Wallets",
+        "value": "leather-wallets"
+    },
+    {
+        "label": "Fine Art",
+        "value": "fine-art"
+    },
+    {
+        "label": "Classic Cars",
+        "value": "classic-cars"
+    },
+    {
+        "label": "Rare Wine",
+        "value": "rare-wine"
+    },
+    {
+        "label": "Designer Handbags",
+        "value": "designer-handbags"
+    },
+    {
+        "label": "Haute Couture Dresses",
+        "value": "haute-couture-dresses"
+    },
+    {
+        "label": "Luxury Yachts",
+        "value": "luxury-yachts"
+    },
+    {
+        "label": "Private Islands",
+        "value": "private-islands"
+    },
+    {
+        "label": "Sports Memorabilia",
+        "value": "sports-memorabilia"
+    },
+    {
+        "label": "Historical Manuscripts",
+        "value": "historical-manuscripts"
+    },
+    {
+        "label": "Antique Furniture",
+        "value": "antique-furniture"
+    },
+    {
+        "label": "Exotic Travel Experiences",
+        "value": "exotic-travel-experiences"
+    },
+    {
+        "label": "Precious Metals",
+        "value": "precious-metals"
+    },
+    {
+        "label": "High-End Real Estate",
+        "value": "high-end-real-estate"
+    },
+    {
+        "label": "Vintage Comic Books",
+        "value": "vintage-comic-books"
+    },
+    {
+        "label": "Collectible Stamps",
+        "value": "collectible-stamps"
+    }
+]
