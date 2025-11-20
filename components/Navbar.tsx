@@ -16,11 +16,11 @@ const Navbar = () => {
                     <div className="w-full h-full bg-sky-100 flex justify-center items-center">
                         <p className="text-sm">Item content 1</p>
                     </div>,
-                    <div className="w-full h-full bg-sky-200 flex justify-center items-center">
+                    <div className="w-full h-full bg-sky-100 flex justify-center items-center">
                         <p className="text-sm">Item content 2</p>
                     </div>,
                 ]}
-                className="w-full bg-sky-200 z-0"
+                className="w-full bg-sky-100 z-0"
             />
             <nav className="navbar">
                 <div className="flex w-full items-center">

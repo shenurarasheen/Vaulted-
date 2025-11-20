@@ -1,7 +1,11 @@
 import CarouselContent from "@/components/CarouselContent";
+import HomeBottomBanner from "@/components/HomeBottomBanner";
 import HomeCarousel from "@/components/HomeCarousel";
+import OfferBanner from "@/components/OfferBanner";
 import ProductCard from "@/components/ProductCard";
-import { ArrowRight } from "lucide-react";
+import ProductCardContainer from "@/components/ProductCardContainer";
+import SectionTitle from "@/components/SectionTitle";
+import products from "@/data/products.json"
 
 const HomePage = () => {
     return (
@@ -20,21 +24,19 @@ const HomePage = () => {
             </section>
 
             <section className="px-10">
-                <div className="flex gap-3 items-center">
-                    <h1 className="text-xl">All Arivals</h1>
-                    <div className="size-8 bg-white border border-gray-300 rounded-full flex items-center justify-center">
-                        <ArrowRight size={18} />
-                    </div>
-                </div>
+                {/* section title */}
+                <SectionTitle title="All Arivals" />
 
-                {/* card container */}
-                <div className="w-full grid xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 mt-6 mb-6">
-                    {/* cards go here */}
-                    <ProductCard
-                        title="Product Title"
-                        desc="product description"
-                    />
-                </div>
+                <ProductCardContainer products={products} />
+
+                <OfferBanner/>
+
+                {/* section title */}
+                <SectionTitle title="Trending Items" />
+
+                <ProductCardContainer products={products} />
+
+                <HomeBottomBanner/>
             </section>
         </>
     )

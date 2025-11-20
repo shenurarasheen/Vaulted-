@@ -20,4 +20,29 @@ declare type HomeCarouselProps = {
 declare type ProductCardProps = {
     title: string;
     desc: string;
+    price: string;
+    soldCount: number;
+    src: string;
+    alt: string;
+}
+
+declare type SectionTitleProps = {
+    title: string;
+}
+
+declare type Product = {
+    title: string;
+    description: string;
+    price: number;
+    soldCount: number;
+    src: string;
+}
+
+declare type ProductCardContainerProps = {
+    products: Product[];
+}
+
+declare type BannerImageProps = {
+    src: string;
+    alt: string;
 }
