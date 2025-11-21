@@ -56,3 +56,21 @@ declare type FooterColumnProps = {
     title: string;
     items: FooterItem[];
 }
+
+declare type InputFiledProps = {
+    label: string;
+    type?: "text" | "password";
+    placeholder: string;
+    desc?: string;
+    className?: string;
+}
+
+declare type AuthButtonProps = {
+    title: string;
+}
+
+declare type AuthBottomLinkProps = {
+    desc: string;
+    href: string;
+    linkText: string;
+}
