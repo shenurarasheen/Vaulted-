@@ -46,3 +46,13 @@ declare type BannerImageProps = {
     src: string;
     alt: string;
 }
+
+declare type FooterItem = {
+    href: string;
+    label: string;
+}
+
+declare type FooterColumnProps = {
+    title: string;
+    items: FooterItem[];
+}

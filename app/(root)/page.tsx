@@ -1,4 +1,5 @@
 import CarouselContent from "@/components/CarouselContent";
+import Footer from "@/components/Footer";
 import HomeBottomBanner from "@/components/HomeBottomBanner";
 import HomeCarousel from "@/components/HomeCarousel";
 import OfferBanner from "@/components/OfferBanner";
@@ -37,7 +38,14 @@ const HomePage = () => {
                 <ProductCardContainer products={products} />
 
                 <HomeBottomBanner/>
+
+                {/* section title */}
+                <SectionTitle title="All Items" />
+
+                <ProductCardContainer products={products} />
             </section>
+
+            <Footer/>
         </>
     )
 }

@@ -15,6 +15,10 @@
   display: none;  
 }
 
+.footer-lists li{
+  @apply text-[12px] text-gray-500 font-semibold hover:underline max-md:text-[10px]
+}
+
 @theme inline {
 
     --radius-sm: calc(var(--radius) - 4px);
