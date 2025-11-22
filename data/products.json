@@ -1,0 +1,42 @@
+[
+    {
+        "title": "Cacio G-Shock GA2100",
+        "description": "Casioak Mod Custom Watch Casio G-Shock GA-2100 Rose Gold Black Bezel Band",
+        "price": 230.99,
+        "soldCount": 143,
+        "shippingAmount": 10.12,
+        "src": "/images/watch.jpg"
+    },
+    {
+        "title": "Rolex Submariner Date",
+        "description": "Iconic Swiss luxury dive watch, 41mm Oystersteel case, black Cerachrom bezel, and Oyster bracelet.",
+        "price": 10500.00,
+        "soldCount": 85,
+        "shippingAmount": 20.12,
+        "src": "/images/watch2.jpg"
+    },
+    {
+        "title": "Audemars Piguet Royal Oak 'Jumbo' Extra-Thin",
+        "description": "The original luxury sports watch, 39mm stainless steel case, 'Petite Tapisserie' dial, and integrated bracelet.",
+        "price": 35000.00,
+        "soldCount": 42,
+        "shippingAmount": 14.15,
+        "src": "/images/watch3.png"
+    },
+    {
+        "title": "Omega Speedmaster Professional Moonwatch",
+        "description": "The legendary chronograph worn by astronauts on the moon, 42mm steel case, Hesalite crystal, and black dial.",
+        "price": 6800.00,
+        "soldCount": 195,
+        "shippingAmount": 10.12,
+        "src": "/images/watch4.jpg"
+    },
+    {
+        "title": "Patek Philippe Calatrava Ref. 6119R",
+        "description": "Elegant dress watch in 18k rose gold, 39mm case, Clous de Paris hobnail bezel, and small seconds sub-dial.",
+        "price": 29500.00,
+        "soldCount": 21,
+        "shippingAmount": 10.12,
+        "src": "/images/watch5.jpg"
+    }
+]
