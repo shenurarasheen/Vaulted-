@@ -15,7 +15,7 @@ const InputField = ({ label, type = "text", placeholder, desc="", className = ""
                 placeholder={placeholder}
                 className="placeholder:text-sm focus-visible:border-sky-500 focus-visible:ring-sky-500/40 focus-visible:ring-2"
             />
-            <FieldDescription className="md:text-sm text-xs">
+            <FieldDescription className="md:text-[123x] text-xs">
                 {desc}
             </FieldDescription>
         </Field>

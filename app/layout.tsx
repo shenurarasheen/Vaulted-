@@ -6,7 +6,8 @@ type RootLayoutProps = Readonly<{ children: React.ReactNode }>
 
 const inter = Inter({
   subsets: ["latin"],
-  display: "swap"
+  display: "swap",
+  variable: "--font-inter",
 });
 
 export const metadata: Metadata = {

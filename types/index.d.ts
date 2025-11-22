@@ -2,6 +2,7 @@ declare type ButtonProps = {
     title: string;
     textColor?: string;
     className: string;
+    url?: string
 }
 
 declare type Category = {
@@ -22,6 +23,7 @@ declare type ProductCardProps = {
     desc: string;
     price: string;
     soldCount: number;
+    shippingCost: number;
     src: string;
     alt: string;
 }
@@ -35,6 +37,7 @@ declare type Product = {
     description: string;
     price: number;
     soldCount: number;
+    shippingAmount?: number
     src: string;
 }
 
@@ -73,4 +76,10 @@ declare type AuthBottomLinkProps = {
     desc: string;
     href: string;
     linkText: string;
+}
+
+declare type PriceDetailsSectionProps = {
+    itemsQty: number;
+    itemsPrice: number;
+    shippingCost: number; 
 }

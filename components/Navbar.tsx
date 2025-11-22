@@ -1,3 +1,5 @@
+"use client";
+
 import { Globe, ShoppingCart, User } from "lucide-react";
 import Button from "./Button";
 import SearchInput from "./SearchInput";
@@ -5,10 +7,13 @@ import CategoryNav from "./CategoryNav";
 import categories from "@/data/categories.json";
 import HomeCarousel from "./HomeCarousel";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 
 const Navbar = () => {
+    const pathname = usePathname();
+
     return (
-        <section className="sticky top-0 w-full">
+        <section className="sticky top-0 w-full z-50">
             <HomeCarousel
                 height="25px"
                 areButtonsShown={false}
@@ -37,12 +42,15 @@ const Navbar = () => {
                         <button><User size={22} /></button>
                         <Button
                             title="Create Account"
+                            url="/sign-up"
                             className="bg-sky-500 hover:bg-sky-500/80"
                         />
                     </div>
                 </div>
             </nav>
-            <CategoryNav categories={categories} />
+            {pathname === "/" && (
+                <CategoryNav categories={categories} />
+            )}
         </section>
     )
 }

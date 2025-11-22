@@ -19,6 +19,14 @@
   @apply text-[12px] text-gray-500 font-semibold hover:underline max-md:text-[10px]
 }
 
+.qty-select option {
+  @apply bg-white
+}
+
+option {
+  font-family: var(--font-inter);
+}
+
 @theme inline {
 
     --radius-sm: calc(var(--radius) - 4px);

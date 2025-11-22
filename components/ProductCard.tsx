@@ -1,7 +1,7 @@
 import { ShoppingCart } from "lucide-react"
 import Image from "next/image"
 
-const ProductCard = ({ title, desc, price, soldCount, src, alt }: ProductCardProps) => {
+const ProductCard = ({ title, desc, price, soldCount, src, alt, shippingCost=0 }: ProductCardProps) => {
     return (
         <div className="cursor-pointer">
             <div className="relative h-55 max-sm:h-40 bg-gray-100 rounded-lg overflow-hidden">
