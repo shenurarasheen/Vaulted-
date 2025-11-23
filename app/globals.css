@@ -4,7 +4,7 @@
 @custom-variant dark (&:is(.dark *));
 
 @utility navbar {
-    @apply w-full py-2 bg-white shadow-sm h-18 px-10 flex overflow-hidden relative mb-2
+    @apply w-full py-2 bg-white shadow-sm h-18 px-10 flex overflow-hidden relative
 }
 
 .hide-scrollbar {

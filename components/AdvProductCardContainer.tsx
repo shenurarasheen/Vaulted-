@@ -1,12 +1,13 @@
+import AdvProductCard from "./AdvProductCard";
 import ProductCard from "./ProductCard";
 
-const ProductCardContainer = ({ products }: ProductCardContainerProps) => {
+const AdvProductCardContainer = ({ products }: ProductCardContainerProps) => {
 
     return (
         <div className="w-full grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 mt-6 mb-6">
             {/* cards go here */}
             {products.map((product, index) => (
-                <ProductCard
+                <AdvProductCard
                     key={index}
                     title={product.title}
                     desc={product.description}
@@ -21,4 +22,4 @@ const ProductCardContainer = ({ products }: ProductCardContainerProps) => {
     )
 }
 
-export default ProductCardContainer;
+export default AdvProductCardContainer;

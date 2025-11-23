@@ -6,6 +6,7 @@ import PriceDetailsSection from "@/components/PriceDetailsSection";
 import { CircleAlert, ShieldAlert } from "lucide-react";
 import Link from "next/link";
 import products from "@/data/products.json";
+import Footer from "@/components/Footer";
 
 const CartPage = () => {
     return (
@@ -37,6 +38,7 @@ const CartPage = () => {
                     </div>
                 </div>
             </main>
+            <Footer/>
         </>
     )
 }
