@@ -6,7 +6,7 @@ const CategoryNav = ({ categories }: { categories: Category[] }) => {
     const [isActive, setIsActive] = useState<boolean>(false);
 
     return (
-        <nav className="h-10 bg-white py-1 px-10 flex items-center overflow-x-auto hide-scrollbar">
+        <nav className="h-10 bg-white py-1 px-10 flex items-center overflow-x-auto hide-scrollbar mt-2">
             <ul className="flex gap-2">
                 <li className="bg-sky-500/30 rounded-full px-4 border border-sky-300 flex items-center w-fit text-nowrap">
                     <a href="" className="text-[13px]">All</a>

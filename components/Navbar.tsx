@@ -7,10 +7,12 @@ import CategoryNav from "./CategoryNav";
 import categories from "@/data/categories.json";
 import HomeCarousel from "./HomeCarousel";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import Link from "next/link";
 
 const Navbar = () => {
     const pathname = usePathname();
+    const router = useRouter();
 
     return (
         <section className="sticky top-0 w-full z-50">
@@ -29,16 +31,18 @@ const Navbar = () => {
             />
             <nav className="navbar">
                 <div className="flex w-full items-center">
-                    <Image
-                        src="/logo.png"
-                        alt="logo image"
-                        width={140}
-                        height={40}
-                    />
+                    <div onClick={() => router.push("/")}>
+                        <Image
+                            src="/logo.png"
+                            alt="logo image"
+                            width={140}
+                            height={40}
+                        />
+                    </div>
                     <SearchInput />
                     <div className="flex xl:gap-8 gap-4 items-center">
                         <button><Globe size={22} /></button>
-                        <button><ShoppingCart size={22} /></button>
+                        <Link href="/cart"><ShoppingCart size={22} /></Link>
                         <button><User size={22} /></button>
                         <Button
                             title="Create Account"
