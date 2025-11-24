@@ -8,6 +8,7 @@ const ProductCardContainer = ({ products }: ProductCardContainerProps) => {
             {products.map((product, index) => (
                 <ProductCard
                     key={index}
+                    id={product.id}
                     title={product.title}
                     desc={product.description}
                     price={`$${product.price.toFixed(2)}`}
