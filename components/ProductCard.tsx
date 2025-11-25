@@ -1,18 +1,23 @@
+"use client"
+
 import { ShoppingCart } from "lucide-react"
 import Image from "next/image"
+import { useRouter } from "next/navigation"
 
-const ProductCard = ({ title, desc, price, soldCount, src, alt, shippingCost=0 }: ProductCardProps) => {
+const ProductCard = ({ id, title, desc, price, soldCount, src, alt, shippingCost=0 }: ProductCardProps) => {
+    const router = useRouter();
+
     return (
-        <div className="cursor-pointer">
-            <div className="relative h-55 max-sm:h-40 bg-gray-100 rounded-lg overflow-hidden">
+        <div className="cursor-pointer" onClick={() => router.push(`/itm/${id}`)}>
+            <div className="relative h-56 max-sm:h-40 bg-gray-100 rounded-lg overflow-hidden">
                 <Image
                     src={src}
                     alt={alt}
-                    className="object-fill bg-cover transition-transform duration-300 ease-in-out hover:scale-110 will-change-transform"
+                    className="object-cover transition-transform duration-300 ease-in-out hover:scale-110 will-change-transform"
                     fill
                 />
-                <div className="absolute top-2 right-2 size-8 bg-white rounded-full flex items-center justify-center">
-                    <ShoppingCart size={20} />
+                <div className="absolute top-2 right-2 w-8 h-8 bg-white rounded-full flex items-center justify-center">
+                    <ShoppingCart size={16} />
                 </div>
             </div>
             <div>

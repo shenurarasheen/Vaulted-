@@ -19,6 +19,7 @@ declare type HomeCarouselProps = {
 }
 
 declare type ProductCardProps = {
+    id: string;
     title: string;
     desc: string;
     price: string;
@@ -33,6 +34,7 @@ declare type SectionTitleProps = {
 }
 
 declare type Product = {
+    id: string;
     title: string;
     description: string;
     price: number;
@@ -82,4 +84,10 @@ declare type PriceDetailsSectionProps = {
     itemsQty: number;
     itemsPrice: number;
     shippingCost: number; 
+}
+
+declare type ProductDetailsPageProps = {
+    params: Promise<{
+        id: string;
+    }>
 }
