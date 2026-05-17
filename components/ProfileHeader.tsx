@@ -1,19 +1,7 @@
 import { CheckCircle, Edit2 } from "lucide-react"
 import Image from "next/image"
 
-type ProfileData = {
-    firstName: string,
-    lastName: string,
-    email: string,
-    phone: string,
-    addressLine1: string,
-    addressLine2: string,
-    city: string,
-    postalCode: string,
-    country: string
-}
-
-const ProfileHeader = ({ setIsEditing, isEditing, formData }: { setIsEditing: (isEditing: boolean) => void, isEditing: boolean, formData: ProfileData }) => {
+const ProfileHeader = ({ setIsEditing, isEditing, formData }: { setIsEditing: (isEditing: boolean) => void, isEditing: boolean, formData: ProfileDataProps }) => {
 
     return (
         <div className="bg-white rounded-2xl shadow-sm p-8 mb-6">
@@ -53,3 +41,5 @@ const ProfileHeader = ({ setIsEditing, isEditing, formData }: { setIsEditing: (i
         </div>
     )
 }
+
+export default ProfileHeader;
