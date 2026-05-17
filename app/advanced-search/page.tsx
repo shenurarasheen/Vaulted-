@@ -1,10 +1,8 @@
 import AdvNavBar from "@/components/AdvNavBar";
 import AdvProductCardContainer from "@/components/AdvProductCardContainer";
-import Button from "@/components/Button";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import PaginationBar from "@/components/Pagination";
-import { Checkbox } from "@/components/ui/checkbox";
 import products from "@/data/products.json";
 import { Search } from "lucide-react";
 

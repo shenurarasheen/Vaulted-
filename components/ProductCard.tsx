@@ -32,4 +32,4 @@ const ProductCard = ({ id, title, desc, price, soldCount, src, alt, shippingCost
     )
 }
 
-export default ProductCard
+export default ProductCard;

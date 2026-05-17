@@ -64,7 +64,7 @@ declare type FooterColumnProps = {
 
 declare type InputFiledProps = {
     label: string;
-    type?: "text" | "password";
+    type?: "text" | "password" | "number";
     placeholder: string;
     desc?: string;
     className?: string;
