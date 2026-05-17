@@ -64,7 +64,7 @@ declare type FooterColumnProps = {
 
 declare type InputFiledProps = {
     label: string;
-    type?: "text" | "password";
+    type?: "text" | "password" | "number";
     placeholder: string;
     desc?: string;
     className?: string;
@@ -90,4 +90,17 @@ declare type ProductDetailsPageProps = {
     params: Promise<{
         id: string;
     }>
+}
+
+declare type ProfileDataProps = {
+    firstName: string,
+    lastName: string,
+    email: string,
+    phone: string,
+    addressLine1: string,
+    addressLine2: string,
+    city: string,
+    postalCode: string,
+    country: string,
+    [key: string]: string
 }

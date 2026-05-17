@@ -20,10 +20,10 @@ const Navbar = () => {
                 height="25px"
                 areButtonsShown={false}
                 itemContent={[
-                    <div className="w-full h-full bg-sky-100 flex justify-center items-center">
+                    <div key="item1" className="w-full h-full bg-sky-100 flex justify-center items-center">
                         <p className="text-sm">Item content 1</p>
                     </div>,
-                    <div className="w-full h-full bg-sky-100 flex justify-center items-center">
+                    <div key="item2" className="w-full h-full bg-sky-100 flex justify-center items-center">
                         <p className="text-sm">Item content 2</p>
                     </div>,
                 ]}
