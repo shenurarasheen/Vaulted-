@@ -104,3 +104,24 @@ declare type ProfileDataProps = {
     country: string,
     [key: string]: string
 }
+
+declare type CreditCardProps = {
+    id: number,
+    cardHolder: string,
+    cardNumber: string,
+    expiryDate: string,
+    cardType: string,
+    isDefault: boolean,
+    lastUsed: string
+}
+
+declare type ShippingAddressProps = {
+    id: number,
+    name: string,
+    street: string,
+    city: string,
+    postalCode: string,
+    country: string,
+    phone: string,
+    isDefault: boolean
+}
