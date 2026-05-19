@@ -3,9 +3,9 @@ import Footer from "@/components/Footer";
 import HomeBottomBanner from "@/components/HomeBottomBanner";
 import HomeCarousel from "@/components/HomeCarousel";
 import OfferBanner from "@/components/OfferBanner";
-import ProductCard from "@/components/ProductCard";
 import ProductCardContainer from "@/components/ProductCardContainer";
 import SectionTitle from "@/components/SectionTitle";
+import AIChatWidget from "@/components/AIChatWidget";
 import products from "@/data/products.json"
 
 const HomePage = () => {
@@ -46,6 +46,8 @@ const HomePage = () => {
             </section>
 
             <Footer/>
+
+            <AIChatWidget />
         </>
     )
 }
