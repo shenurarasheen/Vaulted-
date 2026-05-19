@@ -83,7 +83,7 @@ declare type AuthBottomLinkProps = {
 declare type PriceDetailsSectionProps = {
     itemsQty: number;
     itemsPrice: number;
-    shippingCost: number; 
+    shippingCost: number;
 }
 
 declare type ProductDetailsPageProps = {
@@ -124,4 +124,15 @@ declare type ShippingAddressProps = {
     country: string,
     phone: string,
     isDefault: boolean
+}
+
+declare type ProductProps = {
+    id: string,
+    title: string,
+    price: number,
+    soldCount: number,
+    imageUrl: string,
+    status: "active" | "inactive",
+    createdAt: string,
+    stock: number,
 }
