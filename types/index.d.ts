@@ -64,14 +64,17 @@ declare type FooterColumnProps = {
 
 declare type InputFiledProps = {
     label: string;
-    type?: "text" | "password" | "number";
+    type?: string;
+    field: string;
     placeholder: string;
+    handleInputChange: (field: string, value: string) => void;
     desc?: string;
     className?: string;
 }
 
 declare type AuthButtonProps = {
     title: string;
+    handleClick: () => void;
 }
 
 declare type AuthBottomLinkProps = {
