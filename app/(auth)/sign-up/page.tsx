@@ -1,6 +1,5 @@
 "use client";
 
-import axios from "axios";
 import { useRouter } from "next/navigation";
 import AuthBottomLink from "@/components/AuthBottomLink";
 import AuthButton from "@/components/AuthButton";
@@ -12,10 +11,13 @@ import {
 import { useState } from "react";
 import { toast } from "react-hot-toast";
 import { validateEmail, validatePassword } from "@/lib/validations";
+import api, { ApiResponse } from "@/lib/api";
 
 const SignUpPage = () => {
 
     const router = useRouter();
+
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const [formData, setFormData] = useState({
         firstName: "",
@@ -31,8 +33,6 @@ const SignUpPage = () => {
             [field]: value
         }));
     }
-
-    const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
     const validateFormData = (): boolean => {
         const { firstName, lastName, email, password, confirmPassword } = formData;
@@ -72,12 +72,19 @@ const SignUpPage = () => {
     const handleSignUp = async () => {
         if (!validateFormData()) return;
 
-        const res = await axios.post(`${baseUrl}/auth/register`, formData);
-        const data = res.data;
-        if (data.success) {
-            router.push("/");
-        } else {
-            toast.error(data.message || "Sign Up Failed!")
+        setIsLoading(true);
+
+        try {
+            const res = await api.post<ApiResponse>(`/auth/register`, formData);
+            const data = res.data;
+            if (data.success) {
+                toast.success(data.message || "Sign Up Successful!");
+                router.push("/");
+            }
+        } catch (error) {
+            // Error handling is done globally in the API interceptor, so we don't need to do anything here.
+        } finally {
+            setIsLoading(false);
         }
     }
 
@@ -134,6 +141,7 @@ const SignUpPage = () => {
                     <AuthButton
                         title="Sign Up"
                         handleClick={handleSignUp}
+                        isLoading={isLoading}
                     />
 
                     <AuthBottomLink

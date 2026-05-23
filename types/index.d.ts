@@ -75,6 +75,7 @@ declare type InputFiledProps = {
 declare type AuthButtonProps = {
     title: string;
     handleClick: () => void;
+    isLoading?: boolean;
 }
 
 declare type AuthBottomLinkProps = {
