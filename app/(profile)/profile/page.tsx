@@ -5,19 +5,35 @@ import ProfileHeader from "@/components/ProfileHeader";
 import EditableField from "@/components/EditableField";
 import api from "@/lib/api";
 
+type ProfileData = {
+    firstName: string;
+    lastName: string;
+    email: string;
+    phone: string;
+    profilePicUrl: string;
+    addressLine1: string;
+    addressLine2: string;
+    city: string;
+    postalCode: string;
+    country: string;
+};
+
 const ProfilePage = () => {
     const [isEditing, setIsEditing] = useState(false);
-    const [formData, setFormData] = useState({
-        firstName: "Shenura",
-        lastName: "Rasheen",
-        email: "shenurarasheen@gmail.com",
-        phone: "+1 (555) 123-4567",
-        addressLine1: "Arachchigoda",
-        addressLine2: "Welipitimodara, Gintota",
-        city: "Galle",
-        postalCode: "80000",
-        country: "Sri Lanka"
+    const [formData, setFormData] = useState<ProfileData>({
+        firstName: "",
+        lastName: "",
+        email: "",
+        phone: "",
+        profilePicUrl: "",
+        addressLine1: "",
+        addressLine2: "",
+        city: "",
+        postalCode: "",
+        country: ""
     });
+
+    const [hasAddress, setHasAddress] = useState<boolean>(false);
 
     const personalInfoFields = [
         { label: "First Name", field: "firstName", type: "text", placeholder: "Enter first name" },
@@ -50,12 +66,33 @@ const ProfilePage = () => {
         const fetchProfileData = async () => {
             try {
                 const res = await api.get("/profile/profile-details", { withCredentials: true});
-                console.log(res.data);
+                const data = res.data;
+
+                if (data.success && data.data) {
+
+                    const profileData = data.data;
+
+                    setFormData({
+                        firstName: profileData.firstName,
+                        lastName: profileData.lastName,
+                        email: profileData.email,
+                        phone: profileData.mobile || "-",
+                        profilePicUrl: profileData.profilePicUrl,
+                        addressLine1: profileData.permanentAddress?.line1 || "",
+                        addressLine2: profileData.permanentAddress?.line2 || "",
+                        city: profileData.permanentAddress?.city || "",
+                        postalCode: profileData.permanentAddress?.postalCode || "",
+                        country: profileData.permanentAddress?.country || ""
+                    });
+
+                    setHasAddress(!!profileData.permanentAddress);
+                    
+                }
             } catch(error) {
             }
         }
         fetchProfileData();
-    }, [])
+    }, []);
 
     return (
         <div className="w-full bg-gray-50 min-h-screen p-8">
@@ -93,6 +130,8 @@ const ProfilePage = () => {
                 <h2 className="text-xl font-bold text-gray-900 mb-6 pb-4 border-b border-gray-200">
                     Address Information
                 </h2>
+
+               
                 <div className="grid grid-cols-3 gap-6 mb-6">
 
                     {
