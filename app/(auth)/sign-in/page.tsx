@@ -54,7 +54,7 @@ const SignInPage = () => {
         setIsLoading(true);
 
         try {
-            const res = await api.post<ApiResponse>("/auth/login", formData);
+            const res = await api.post<ApiResponse>("/auth/login", formData, { withCredentials: true });
             const data = res.data;
             if (data.success) {
                 toast.success(data.message || "Login successful!");

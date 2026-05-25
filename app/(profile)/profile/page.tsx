@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ProfileHeader from "@/components/ProfileHeader";
 import EditableField from "@/components/EditableField";
+import api from "@/lib/api";
 
 const ProfilePage = () => {
     const [isEditing, setIsEditing] = useState(false);
@@ -44,6 +45,17 @@ const ProfilePage = () => {
         setIsEditing(false);
         // API call would go here
     };
+
+    useEffect(() => {
+        const fetchProfileData = async () => {
+            try {
+                const res = await api.get("/profile/profile-details", { withCredentials: true});
+                console.log(res.data);
+            } catch(error) {
+            }
+        }
+        fetchProfileData();
+    }, [])
 
     return (
         <div className="w-full bg-gray-50 min-h-screen p-8">
