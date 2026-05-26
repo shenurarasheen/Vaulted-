@@ -75,7 +75,7 @@ const SignUpPage = () => {
         setIsLoading(true);
 
         try {
-            const res = await api.post<ApiResponse>(`/auth/register`, formData);
+            const res = await api.post<ApiResponse>(`/auth/register`, formData, { withCredentials: true });
             const data = res.data;
             if (data.success) {
                 toast.success(data.message || "Sign Up Successful!");
