@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import ProfileHeader from "@/components/ProfileHeader";
 import EditableField from "@/components/EditableField";
 import api from "@/lib/api";
+import toast from "react-hot-toast";
 
 type ProfileData = {
     firstName: string;
@@ -57,15 +58,46 @@ const ProfilePage = () => {
         }));
     };
 
-    const handleSave = () => {
+    const handleSave = async () => {
         setIsEditing(false);
-        // API call would go here
+
+        try {
+            const res = await api.put("/profile/update-profile", formData, { withCredentials: true });
+            const data = res.data;
+
+            if (data.success) {
+               const updatedProfileData = data.data;
+
+               const { addresses, permanentAddressId, ...personalInfo } = updatedProfileData;
+               if (addresses) {
+                    const permanentAddress = addresses[permanentAddressId];
+
+                    if (permanentAddress) {
+                        setFormData({
+                            ...personalInfo,
+                            addressLine1: permanentAddress.addressLine1,
+                            addressLine2: permanentAddress.addressLine2,
+                            city: permanentAddress.city,
+                            postalCode: permanentAddress.postalCode,
+                            country: permanentAddress.country
+                        });
+                        setHasAddress(true);
+                        setIsEditing(false);
+                    }
+               }
+               
+            } else {
+                toast.error("Failed to update profile. Please try again.");
+            }
+
+        } catch (error) {
+        }
     };
 
     useEffect(() => {
         const fetchProfileData = async () => {
             try {
-                const res = await api.get("/profile/profile-details", { withCredentials: true});
+                const res = await api.get("/profile/profile-details", { withCredentials: true });
                 const data = res.data;
 
                 if (data.success && data.data) {
@@ -86,9 +118,9 @@ const ProfilePage = () => {
                     });
 
                     setHasAddress(!!profileData.permanentAddress);
-                    
+
                 }
-            } catch(error) {
+            } catch (error) {
             }
         }
         fetchProfileData();
@@ -131,25 +163,29 @@ const ProfilePage = () => {
                     Address Information
                 </h2>
 
-               
-                <div className="grid grid-cols-3 gap-6 mb-6">
+                {(isEditing || hasAddress) ? (
+                    <div className="grid grid-cols-3 gap-6 mb-6">
 
-                    {
-                        addressInfoFields.map((field, index) => (
-                            <div key={index} className={field.gridCols}>
-                                <label className="block text-sm font-semibold text-gray-700 mb-2">{field.label}</label>
-                                <EditableField
-                                    isEditing={isEditing}
-                                    field={field.field}
-                                    placeholder={field.placeholder}
-                                    formData={formData}
-                                    handleInputChange={handleInputChange}
-                                />
-                            </div>
-                        ))
-                    }
+                        {
+                            addressInfoFields.map((field, index) => (
+                                <div key={index} className={field.gridCols}>
+                                    <label className="block text-sm font-semibold text-gray-700 mb-2">{field.label}</label>
+                                    <EditableField
+                                        isEditing={isEditing}
+                                        field={field.field}
+                                        placeholder={field.placeholder}
+                                        formData={formData}
+                                        handleInputChange={handleInputChange}
+                                    />
+                                </div>
+                            ))
+                        }
 
-                </div>       
+                    </div>
+                ) : (
+                    <p className="text-gray-500">No address information available.</p>
+                )}
+
             </div>
 
             {/* Action Buttons */}
