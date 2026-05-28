@@ -81,8 +81,10 @@ const ProfilePage = () => {
                             postalCode: permanentAddress.postalCode,
                             country: permanentAddress.country
                         });
+
+                        toast.success("Profile upated successfully!");
+
                         setHasAddress(true);
-                        setIsEditing(false);
                     }
                }
                
@@ -104,14 +106,16 @@ const ProfilePage = () => {
 
                     const profileData = data.data;
 
+                    console.log(profileData);
+
                     setFormData({
                         firstName: profileData.firstName,
                         lastName: profileData.lastName,
                         email: profileData.email,
-                        phone: profileData.mobile || "-",
+                        phone: profileData.phone || "-",
                         profilePicUrl: profileData.profilePicUrl,
-                        addressLine1: profileData.permanentAddress?.line1 || "",
-                        addressLine2: profileData.permanentAddress?.line2 || "",
+                        addressLine1: profileData.permanentAddress?.addressLine1 || "",
+                        addressLine2: profileData.permanentAddress?.addressLine2 || "",
                         city: profileData.permanentAddress?.city || "",
                         postalCode: profileData.permanentAddress?.postalCode || "",
                         country: profileData.permanentAddress?.country || ""

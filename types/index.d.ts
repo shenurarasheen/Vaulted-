@@ -119,15 +119,15 @@ declare type CreditCardProps = {
     lastUsed: string
 }
 
-declare type ShippingAddressProps = {
-    id: number,
+declare type ShippingAddress = {
     name: string,
-    street: string,
+    addressLine1: string,
+    addressLine2: string,
     city: string,
     postalCode: string,
     country: string,
-    phone: string,
-    isDefault: boolean
+    phone?: string,
+    isDefault?: boolean
 }
 
 declare type ProductProps = {

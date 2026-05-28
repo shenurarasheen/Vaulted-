@@ -2,10 +2,14 @@
 
 import VirtualCreditCard from "@/components/CreditCard";
 import ShippingAddressCard from "@/components/ShippingAddressCard";
-import { MapPin, Plus, Trash2, Edit2, CheckCircle, CreditCard } from "lucide-react";
-import { useState } from "react";
+import AddAddressModal from "@/components/AddAddressModal";
+import api from "@/lib/api";
+import { MapPin, Plus, CreditCard } from "lucide-react";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 const PaymentDetailsPage = () => {
+
     const [savedCards, setSavedCards] = useState<CreditCardProps[]>([
         {
             id: 1,
@@ -36,51 +40,42 @@ const PaymentDetailsPage = () => {
         }
     ]);
 
-    const [shippingAddresses, setShippingAddresses] = useState([
-        {
-            id: 1,
-            name: "Home Address",
-            street: "123 Main Street",
-            city: "Galle",
-            postalCode: "80000",
-            country: "Sri Lanka",
-            phone: "+1 (555) 123-4567",
-            isDefault: true
-        },
-        {
-            id: 2,
-            name: "Work Address",
-            street: "456 Business Ave, Suite 200",
-            city: "Colombo",
-            postalCode: "00100",
-            country: "Sri Lanka",
-            phone: "+1 (555) 987-6543",
-            isDefault: false
-        },
-        {
-            id: 3,
-            name: "Vacation Home",
-            street: "789 Beach Road",
-            city: "Mirissa",
-            postalCode: "81000",
-            country: "Sri Lanka",
-            phone: "+1 (555) 456-7890",
-            isDefault: false
-        }
-    ]);
+    const [shippingAddresses, setShippingAddresses] = useState<Record<string, ShippingAddress> | null>(null);
+    const [isAddAddressModalOpen, setIsAddAddressModalOpen] = useState(false);
 
-    const getCardColor = (cardType: string) => {
-        switch (cardType) {
-            case "Visa":
-                return "from-blue-300 to-blue-400";
-            case "Mastercard":
-                return "from-red-300 to-orange-400";
-            case "American Express":
-                return "from-green-300 to-emerald-400";
-            default:
-                return "from-gray-300 to-gray-400";
-        }
+    const handleAddAddress = async (formData: any) => {
+        
     };
+
+    useEffect(() => {
+        const fetchShippingAddresses = async () => {
+            const res = await api.get("/profile/payment-details", { withCredentials: true });
+            const data = res.data;
+
+            if (data.success) {
+                const fetchedAddresses = data.data.addresses as Record<string, ShippingAddress>;
+                const userMobile = data.data.phone;
+                const permanentAddressId = data.data.permanentAddressId;
+
+                if (fetchedAddresses) {
+                    Object.entries(fetchedAddresses).forEach(([key, address]) => {
+                        fetchedAddresses[key] = {
+                            ...address,
+                            phone: userMobile,
+                            name: key === permanentAddressId ? "Home Address" : "Other",
+                            isDefault: key === permanentAddressId
+                        }
+                    })
+                }
+
+                setShippingAddresses(fetchedAddresses);
+
+            } else {
+                toast.error("Failed to fetch user addresses.");
+            }
+        }
+        fetchShippingAddresses();
+    }, []);
 
     return (
         <div className="w-full bg-gray-50 min-h-screen p-8">
@@ -117,18 +112,36 @@ const PaymentDetailsPage = () => {
                         <MapPin className="text-blue-600" size={28} />
                         Shipping Addresses
                     </h2>
-                    <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all font-medium">
+                    <button 
+                        onClick={() => setIsAddAddressModalOpen(true)}
+                        className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all font-medium"
+                    >
                         <Plus size={20} />
                         Add Address
                     </button>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {shippingAddresses.map((address) => (
-                        <ShippingAddressCard key={address.id} address={address} />
-                    ))}
+                    {
+                        shippingAddresses ? (
+                            Object.entries(shippingAddresses).map(([key, address]) => (
+                                <ShippingAddressCard key={key} address={address} />
+                            ))
+                        ) : (
+                            <div className="col-span-3">
+                                <p className="text-center my-10 text-gray-500 text-lg font-semibold">No shipping Address Added</p>
+                            </div>
+                        )
+
+                    }
                 </div>
             </div>
+
+            <AddAddressModal 
+                isOpen={isAddAddressModalOpen}
+                onClose={() => setIsAddAddressModalOpen(false)}
+                onSubmit={handleAddAddress}
+            />
         </div>
     );
 };
