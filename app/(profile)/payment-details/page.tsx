@@ -40,42 +40,105 @@ const PaymentDetailsPage = () => {
         }
     ]);
 
-    const [shippingAddresses, setShippingAddresses] = useState<Record<string, ShippingAddress> | null>(null);
+    const [shippingAddresses, setShippingAddresses] = useState<ShippingAddress[]>([]);
     const [isAddAddressModalOpen, setIsAddAddressModalOpen] = useState(false);
+    const [isEditing, setIsEditing] = useState<boolean>(false);
 
-    const handleAddAddress = async (formData: any) => {
-        
-    };
 
     useEffect(() => {
         const fetchShippingAddresses = async () => {
-            const res = await api.get("/profile/payment-details", { withCredentials: true });
-            const data = res.data;
+            try {
+                const res = await api.get("/profile/payment-details", { withCredentials: true });
+                const data = res.data;
 
-            if (data.success) {
-                const fetchedAddresses = data.data.addresses as Record<string, ShippingAddress>;
-                const userMobile = data.data.phone;
-                const permanentAddressId = data.data.permanentAddressId;
-
-                if (fetchedAddresses) {
-                    Object.entries(fetchedAddresses).forEach(([key, address]) => {
-                        fetchedAddresses[key] = {
-                            ...address,
-                            phone: userMobile,
-                            name: key === permanentAddressId ? "Home Address" : "Other",
-                            isDefault: key === permanentAddressId
-                        }
-                    })
+                if (data.success) {
+                    const fetchedAddresses = data.data as ShippingAddress[];
+                    setShippingAddresses(fetchedAddresses);
+                } else {
+                    toast.error("Failed to fetch user addresses.");
                 }
-
-                setShippingAddresses(fetchedAddresses);
-
-            } else {
-                toast.error("Failed to fetch user addresses.");
+            } catch (error) {
             }
         }
         fetchShippingAddresses();
     }, []);
+
+
+
+    // Function to handle adding a new address
+    const handleAddAddress = async (formData: AddressFormData) => {
+        try {
+            const res = await api.post("/profile/save-address", formData, { withCredentials: true });
+            const data = res.data;
+            if (data.success) {
+                const newAddress = data.data as ShippingAddress;
+
+                setShippingAddresses(prevAddresses => [...prevAddresses, newAddress]);
+                setIsAddAddressModalOpen(false);
+
+                toast.success("Address saved succesfully!");
+            } else {
+                toast.error("Failed to add user address. Please try again later.");
+            }
+        } catch (error) {
+        }
+    };
+
+
+
+    // Function to handle deleting an address
+    const handleAddressDelete = async (addressId: string) => {
+        try {
+            const res = await api.delete(`profile/delete-address/${addressId}`, { withCredentials: true });
+            const data = res.data;
+
+            if (data.success) {
+
+                // remove the address from the state
+                setShippingAddresses(prevAddresses => prevAddresses.filter(address => address.addressId !== addressId));
+                toast.success(data.data.message || "Address deleted successfully!");
+
+            } else {
+                toast.error("Failed to delete the address.");
+            }
+        } catch (error) {
+        }
+    }
+
+
+
+    // Function to handle update address
+    const handleAddressUpdate = async (addressId: string, formData: AddressFormData) => {
+        const res = await api.put(`profile/update-address/${addressId}`, formData, { withCredentials: true });
+        const data = res.data;
+
+        if (data.success) {
+            const updatedAddress = data.data as ShippingAddress;
+            if (updatedAddress) {
+                setShippingAddresses(prevAddresses => prevAddresses.map(address => address.addressId === updatedAddress.addressId ? updatedAddress : address));
+                toast.success("Address updated successfully!");
+            } else {
+                toast.error("Failed to update the address.");
+            }
+
+        } else {
+            toast.error("Failed to update the address.");
+        }
+    }
+
+
+
+    // Function to open the edit address modal
+    const openEditAddressModal = (addressId: string) => {
+        const address = shippingAddresses.find(address => address.addressId === addressId);
+        if (address) {
+
+        } else {
+            toast.error("Address not found.");
+        }
+    }
+
+
 
     return (
         <div className="w-full bg-gray-50 min-h-screen p-8">
@@ -112,7 +175,7 @@ const PaymentDetailsPage = () => {
                         <MapPin className="text-blue-600" size={28} />
                         Shipping Addresses
                     </h2>
-                    <button 
+                    <button
                         onClick={() => setIsAddAddressModalOpen(true)}
                         className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all font-medium"
                     >
@@ -123,11 +186,16 @@ const PaymentDetailsPage = () => {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {
-                        shippingAddresses ? (
-                            Object.entries(shippingAddresses).map(([key, address]) => (
-                                <ShippingAddressCard key={key} address={address} />
-                            ))
-                        ) : (
+                        shippingAddresses.length > 0 ? (
+                            shippingAddresses.map(address => (
+                                <ShippingAddressCard
+                                    key={address.addressId}
+                                    addressId={address.addressId}
+                                    address={address}
+                                    handleAddressDelete={handleAddressDelete}
+                                />
+                            )
+                            )) : (
                             <div className="col-span-3">
                                 <p className="text-center my-10 text-gray-500 text-lg font-semibold">No shipping Address Added</p>
                             </div>
@@ -137,11 +205,21 @@ const PaymentDetailsPage = () => {
                 </div>
             </div>
 
-            <AddAddressModal 
+            {/* Need to update address model for adding and editing address in same modal. */}
+            {
+                isEditing ? (
+                    <div></div>
+                ) : (
+                    <div></div>
+                )
+            }
+
+            <AddAddressModal
                 isOpen={isAddAddressModalOpen}
                 onClose={() => setIsAddAddressModalOpen(false)}
                 onSubmit={handleAddAddress}
             />
+
         </div>
     );
 };

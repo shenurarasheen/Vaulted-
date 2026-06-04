@@ -9,23 +9,14 @@ interface AddAddressModalProps {
     onSubmit: (address: AddressFormData) => void;
 }
 
-interface AddressFormData {
-    addressLine1: string;
-    addressLine2: string;
-    city: string;
-    postalCode: string;
-    country: string;
-    phone: string;
-}
-
 const AddAddressModal = ({ isOpen, onClose, onSubmit }: AddAddressModalProps) => {
+    
     const [formData, setFormData] = useState<AddressFormData>({
         addressLine1: "",
         addressLine2: "",
         city: "",
         postalCode: "",
-        country: "United States",
-        phone: ""
+        country: ""
     });
 
     const [errors, setErrors] = useState<Partial<AddressFormData>>({});
@@ -47,9 +38,6 @@ const AddAddressModal = ({ isOpen, onClose, onSubmit }: AddAddressModalProps) =>
         }
         if (!formData.country) {
             newErrors.country = "Country is required";
-        }
-        if (!formData.phone.trim()) {
-            newErrors.phone = "Phone is required";
         }
 
         setErrors(newErrors);
@@ -81,8 +69,7 @@ const AddAddressModal = ({ isOpen, onClose, onSubmit }: AddAddressModalProps) =>
                 addressLine2: "",
                 city: "",
                 postalCode: "",
-                country: "United States",
-                phone: ""
+                country: "United States"
             });
         }
     };
@@ -197,49 +184,26 @@ const AddAddressModal = ({ isOpen, onClose, onSubmit }: AddAddressModalProps) =>
                         </div>
                     </div>
 
-                    {/* Country and Phone */}
-                    <div className="grid grid-cols-2 gap-3">
-                        <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                Country <span className="text-red-500">*</span>
-                            </label>
-                            <input
-                                type="text"
-                                name="country"
-                                value={formData.country}
-                                onChange={handleInputChange}
-                                placeholder="Enter country name"
-                                className={`w-full px-3 py-2 border rounded-lg text-sm focus:outline-none transition-all ${
-                                    errors.country
-                                        ? "border-red-500 bg-red-50"
-                                        : "border-gray-300 focus:border-blue-600 hover:border-gray-400"
-                                }`}
-                            />
-                            {errors.country && (
-                                <p className="text-red-500 text-xs mt-0.5">{errors.country}</p>
-                            )}
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                Phone <span className="text-red-500">*</span>
-                            </label>
-                            <input
-                                type="tel"
-                                name="phone"
-                                value={formData.phone}
-                                onChange={handleInputChange}
-                                placeholder="Enter phone number"
-                                className={`w-full px-3 py-2 border rounded-lg text-sm focus:outline-none transition-all ${
-                                    errors.phone
-                                        ? "border-red-500 bg-red-50"
-                                        : "border-gray-300 focus:border-blue-600 hover:border-gray-400"
-                                }`}
-                            />
-                            {errors.phone && (
-                                <p className="text-red-500 text-xs mt-0.5">{errors.phone}</p>
-                            )}
-                        </div>
+                    {/* Country */}
+                    <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-2">
+                            Country <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                            type="text"
+                            name="country"
+                            value={formData.country}
+                            onChange={handleInputChange}
+                            placeholder="Enter country name"
+                            className={`w-full px-3 py-2 border rounded-lg text-sm focus:outline-none transition-all ${
+                                errors.country
+                                    ? "border-red-500 bg-red-50"
+                                    : "border-gray-300 focus:border-blue-600 hover:border-gray-400"
+                            }`}
+                        />
+                        {errors.country && (
+                            <p className="text-red-500 text-xs mt-0.5">{errors.country}</p>
+                        )}
                     </div>
 
                     {/* Buttons */}
@@ -253,7 +217,7 @@ const AddAddressModal = ({ isOpen, onClose, onSubmit }: AddAddressModalProps) =>
                         </button>
                         <button
                             type="submit"
-                            className="flex-1 px-4 py-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold text-sm rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all shadow-md hover:shadow-lg"
+                            className="flex-1 px-4 py-2 bg-linear-to-r from-blue-600 to-blue-700 text-white font-semibold text-sm rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all shadow-md hover:shadow-lg"
                         >
                             Add Address
                         </button>
