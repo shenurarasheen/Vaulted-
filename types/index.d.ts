@@ -120,6 +120,7 @@ declare type CreditCardProps = {
 }
 
 declare type ShippingAddress = {
+    addressId: string,
     name: string,
     addressLine1: string,
     addressLine2: string,
@@ -139,4 +140,25 @@ declare type ProductProps = {
     status: "active" | "inactive",
     createdAt: string,
     stock: number,
+}
+
+declare type AddressFormData = {
+    addressLine1: string;
+    addressLine2: string;
+    city: string;
+    postalCode: string;
+    country: string;
+}
+
+type ProductFormData = {
+    images: (string | null)[];
+    title: string;
+    description: string;
+    basePrice: number;
+    discountType: "none" | "percentage" | "fixed";
+    discountValue: number;
+    category: string;
+    attributes: {key: string; value: string}[];
+    stock: number;
+    shippingAmount: number;
 }
