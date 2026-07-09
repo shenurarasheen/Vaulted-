@@ -1,6 +1,6 @@
 import { CheckCircle, Edit2, Trash2 } from "lucide-react";
 
-const ShippingAddressCard = ({ address, addressId, handleAddressDelete }: { address: ShippingAddress, addressId: string, handleAddressDelete: (addressId: string) => void }) => {
+const ShippingAddressCard = ({ address, addressId, handleAddressDelete, openEditAddressModal }: { address: ShippingAddress, addressId: string, handleAddressDelete: (addressId: string) => void, openEditAddressModal: (addressId: string) => void }) => {
 
     return (
         <div
@@ -48,7 +48,10 @@ const ShippingAddressCard = ({ address, addressId, handleAddressDelete }: { addr
 
             {/* Action Buttons */}
             <div className="flex gap-3">
-                <button className="flex-1 flex items-center justify-center gap-2 px-4 py-2 border-2 border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 transition-all font-medium">
+                <button
+                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2 border-2 border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 transition-all font-medium"
+                    onClick={() => openEditAddressModal(addressId)}
+                >
                     <Edit2 size={18} />
                     Edit
                 </button>

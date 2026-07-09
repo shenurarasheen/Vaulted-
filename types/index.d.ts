@@ -149,3 +149,16 @@ declare type AddressFormData = {
     postalCode: string;
     country: string;
 }
+
+type ProductFormData = {
+    images: (string | null)[];
+    title: string;
+    description: string;
+    basePrice: number;
+    discountType: "none" | "percentage" | "fixed";
+    discountValue: number;
+    category: string;
+    attributes: {key: string; value: string}[];
+    stock: number;
+    shippingAmount: number;
+}

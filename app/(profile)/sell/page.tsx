@@ -4,10 +4,13 @@ import { useState } from 'react';
 import { Search, Plus, TrendingUp, Package, DollarSign } from 'lucide-react';
 import SellerStatusCard from '@/components/SellerStatusCard';
 import SellerProductRow from '@/components/SellerProductRow';
+import AddProductPopup from '@/components/AddProduct';
+import api from '@/lib/api';
 
 const SellPage = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [filterStatus, setFilterStatus] = useState('all');
+    const [isAddProductPopupOpen, setIsAddProductPopupOpen] = useState(false);
 
     // Mock data - Replace with actual API call
     const sellerProducts: ProductProps[] = [
@@ -71,6 +74,16 @@ const SellPage = () => {
         0
     );
 
+
+    // Add product handler function
+    const handleAddProduct = async (formData: ProductFormData) => {
+        // Validate form data before sending to API
+
+
+        const res = await api.post("/products/add", formData, { withCredentials: true });
+    }
+
+    
     return (
         <div className="min-h-screen bg-linear-to-br from-slate-50 to-slate-100 p-4 md:p-8">
             {/* Header Section */}
@@ -84,7 +97,10 @@ const SellPage = () => {
                             Manage and track your selling products
                         </p>
                     </div>
-                    <button className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors shadow-md hover:shadow-lg">
+                    <button 
+                    className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors shadow-md hover:shadow-lg"
+                    onClick={() => setIsAddProductPopupOpen(true)}
+                    >
                         <Plus size={20} />
                         Add New Product
                     </button>
@@ -131,6 +147,7 @@ const SellPage = () => {
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             className="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            required
                         />
                     </div>
                     <select
@@ -203,6 +220,12 @@ const SellPage = () => {
                     </button>
                 </div>
             )}
+
+            <AddProductPopup
+                isOpen={isAddProductPopupOpen}
+                onClose={() => setIsAddProductPopupOpen(false)}
+                onSubmit={handleAddProduct}
+            />
         </div>
     );
 };

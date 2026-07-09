@@ -43,6 +43,7 @@ const PaymentDetailsPage = () => {
     const [shippingAddresses, setShippingAddresses] = useState<ShippingAddress[]>([]);
     const [isAddAddressModalOpen, setIsAddAddressModalOpen] = useState(false);
     const [isEditing, setIsEditing] = useState<boolean>(false);
+    const [editingAddressId, setEditingAddressId] = useState<string>("")
 
 
     useEffect(() => {
@@ -108,7 +109,7 @@ const PaymentDetailsPage = () => {
 
 
     // Function to handle update address
-    const handleAddressUpdate = async (addressId: string, formData: AddressFormData) => {
+    const handleAddressUpdate = async (formData: AddressFormData, addressId: string) => {
         const res = await api.put(`profile/update-address/${addressId}`, formData, { withCredentials: true });
         const data = res.data;
 
@@ -116,7 +117,9 @@ const PaymentDetailsPage = () => {
             const updatedAddress = data.data as ShippingAddress;
             if (updatedAddress) {
                 setShippingAddresses(prevAddresses => prevAddresses.map(address => address.addressId === updatedAddress.addressId ? updatedAddress : address));
-                toast.success("Address updated successfully!");
+                setIsAddAddressModalOpen(false);
+                console.log(updatedAddress);
+                toast.success(data.message ||"Address updated successfully!");
             } else {
                 toast.error("Failed to update the address.");
             }
@@ -132,7 +135,9 @@ const PaymentDetailsPage = () => {
     const openEditAddressModal = (addressId: string) => {
         const address = shippingAddresses.find(address => address.addressId === addressId);
         if (address) {
-
+            setIsAddAddressModalOpen(true);
+            setEditingAddressId(addressId);
+            setIsEditing(true);
         } else {
             toast.error("Address not found.");
         }
@@ -176,7 +181,10 @@ const PaymentDetailsPage = () => {
                         Shipping Addresses
                     </h2>
                     <button
-                        onClick={() => setIsAddAddressModalOpen(true)}
+                        onClick={() => {
+                            setIsAddAddressModalOpen(true);
+                            setIsEditing(false);
+                        }}
                         className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all font-medium"
                     >
                         <Plus size={20} />
@@ -193,6 +201,7 @@ const PaymentDetailsPage = () => {
                                     addressId={address.addressId}
                                     address={address}
                                     handleAddressDelete={handleAddressDelete}
+                                    openEditAddressModal={openEditAddressModal}
                                 />
                             )
                             )) : (
@@ -205,19 +214,19 @@ const PaymentDetailsPage = () => {
                 </div>
             </div>
 
-            {/* Need to update address model for adding and editing address in same modal. */}
-            {
-                isEditing ? (
-                    <div></div>
-                ) : (
-                    <div></div>
-                )
-            }
-
             <AddAddressModal
                 isOpen={isAddAddressModalOpen}
                 onClose={() => setIsAddAddressModalOpen(false)}
-                onSubmit={handleAddAddress}
+                onSubmit={(formData) => {
+                    if (isEditing && editingAddressId) {
+                        handleAddressUpdate(formData, editingAddressId);
+                    } else {
+                        handleAddAddress(formData);
+                    }
+                }}
+                mode={isEditing ? "edit" : "add"}
+                initialData={isEditing ? shippingAddresses.find(address => address.addressId === editingAddressId) : undefined}
+                addressId={isEditing ? editingAddressId : undefined}
             />
 
         </div>
