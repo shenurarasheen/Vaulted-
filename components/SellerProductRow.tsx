@@ -1,6 +1,8 @@
+"use client";
+
 import { Edit2, Eye, Trash2 } from "lucide-react";
 
-const SellerProductRow = ({ product }: { product: ProductProps }) => {
+const SellerProductRow = ({ product, onView }: { product: ProductProps; onView: (product: ProductProps) => void }) => {
 
     const getPlaceholderEmoji = (type: string) => {
         const emojis: { [key: string]: string } = {
@@ -107,6 +109,7 @@ const SellerProductRow = ({ product }: { product: ProductProps }) => {
                         <button
                             title="View"
                             className="p-2 hover:bg-blue-50 rounded-lg text-blue-600 hover:text-blue-700 transition-colors"
+                            onClick={() => onView(product)}
                         >
                             <Eye size={18} />
                         </button>

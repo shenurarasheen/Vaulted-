@@ -154,8 +154,18 @@ type ProductFormData = {
 }
 
 // Product props for response after adding a new product
-type ProductProps = ProductFormData & {
+type ProductProps = {
     _id: string;
+    imageUrls: (string | null)[];
+    title: string;
+    description: string;
+    basePrice: number;
+    discountType: "none" | "percentage" | "fixed";
+    discountValue: number;
+    category: string;
+    attributes: {key: string; value: string}[];
+    stock: number;
+    shippingAmount: number;
     soldCount: number;
     status: "active" | "inactive"
     userId: string;

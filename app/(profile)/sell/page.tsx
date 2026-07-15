@@ -1,10 +1,11 @@
 'use client';
 
-import { useState } from 'react';
-import { Search, Plus, TrendingUp, Package, DollarSign } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Search, Plus, TrendingUp, Package, DollarSign, LoaderCircle } from 'lucide-react';
 import SellerStatusCard from '@/components/SellerStatusCard';
 import SellerProductRow from '@/components/SellerProductRow';
 import AddProductPopup from '@/components/AddProduct';
+import ProductDetailPopup from '@/components/ProductDetailsPopup';
 import toast from 'react-hot-toast';
 import api from '@/lib/api';
 
@@ -14,20 +15,7 @@ const SellPage = () => {
     const [isAddProductPopupOpen, setIsAddProductPopupOpen] = useState(false);
     const [sellerProducts, setSellerProducts] = useState<ProductProps[]>([]);
     const [isLoading, setIsLoading] = useState(false);
-
-    // Mock data - Replace with actual API call
-    // const sellerProducts: ProductProps[] = [
-    //     {
-    //         id: '1',
-    //         title: 'Premium Wireless Headphones',
-    //         price: 129.99,
-    //         soldCount: 245,
-    //         imageUrl: 'headphones',
-    //         status: 'active',
-    //         createdAt: '2024-01-15',
-    //         stock: 45,
-    //     },
-    // ];
+    const [selectedProduct, setSelectedProduct] = useState<ProductProps | null>(null);
 
     const filteredProducts = sellerProducts.filter((product) => {
         const matchesSearch =
@@ -47,10 +35,33 @@ const SellPage = () => {
         0
     );
 
+    //Load seller products
+    useEffect(() => {
+        const fetchSellerProducts = async () => {
+            setIsLoading(true);
+            try {
+                const res = await api.get("/products/get-all", { withCredentials: true });
+                const data = res.data;
+                if (data.success) {
+                    const sellerProducts = data.data as ProductProps[];
+                    
+                    setSellerProducts(sellerProducts);
+
+                } else {
+                    toast.error(data.message || "Failed to fetch selling products");
+                }
+            } catch (error) {
+                // API interceptor handles response errors.
+            } finally {
+                setIsLoading(false);
+            }
+        }
+        fetchSellerProducts();
+    }, []);
+
     // Add product handler function
     const handleAddProduct = async (formData: FormData) => {
         setIsLoading(true);
-
         try {
             const res = await api.post("/products/add", formData, { withCredentials: true });
             const data = res.data;
@@ -71,7 +82,6 @@ const SellPage = () => {
             setIsLoading(false);
         }
     }
-
 
     return (
         <div className="min-h-screen bg-linear-to-br from-slate-50 to-slate-100 p-4 md:p-8">
@@ -182,9 +192,23 @@ const SellPage = () => {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-slate-200">
-                                {filteredProducts.map((product) => (
-                                    <SellerProductRow key={product._id} product={product} />
-                                ))}
+                                {isLoading ? (
+                                    <tr>
+                                        <td colSpan={7} className="py-12 text-center">
+                                            <div className="inline-flex items-center justify-center">
+                                                <LoaderCircle size={32} className="animate-spin text-blue-600" />
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ) :
+                                    filteredProducts.map((product) => (
+                                        <SellerProductRow
+                                            key={product._id}
+                                            product={product}
+                                            onView={(selectedProduct) => setSelectedProduct(selectedProduct)}
+                                        />
+                                    ))
+                                }
                             </tbody>
                         </table>
                     </div>
@@ -203,9 +227,9 @@ const SellPage = () => {
                             ? 'Try adjusting your search or filter criteria'
                             : 'Start by adding your first product'}
                     </p>
-                    <button 
-                    className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
-                    onClick={() => setIsAddProductPopupOpen(true)}>
+                    <button
+                        className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+                        onClick={() => setIsAddProductPopupOpen(true)}>
                         <Plus size={20} />
                         Add Your First Product
                     </button>
@@ -218,6 +242,15 @@ const SellPage = () => {
                 onSubmit={handleAddProduct}
                 isLoading={isLoading}
             />
+
+            {selectedProduct && (
+                <ProductDetailPopup
+                    product={selectedProduct}
+                    isOpen={selectedProduct !== null}
+                    onClose={() => setSelectedProduct(null)}
+                    onDelete={() => { }}
+                />
+            )}
         </div>
     );
 };
