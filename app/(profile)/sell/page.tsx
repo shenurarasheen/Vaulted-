@@ -5,68 +5,41 @@ import { Search, Plus, TrendingUp, Package, DollarSign } from 'lucide-react';
 import SellerStatusCard from '@/components/SellerStatusCard';
 import SellerProductRow from '@/components/SellerProductRow';
 import AddProductPopup from '@/components/AddProduct';
+import toast from 'react-hot-toast';
 import api from '@/lib/api';
 
 const SellPage = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [filterStatus, setFilterStatus] = useState('all');
     const [isAddProductPopupOpen, setIsAddProductPopupOpen] = useState(false);
+    const [sellerProducts, setSellerProducts] = useState<ProductProps[]>([]);
+    const [isLoading, setIsLoading] = useState(false);
 
     // Mock data - Replace with actual API call
-    const sellerProducts: ProductProps[] = [
-        {
-            id: '1',
-            title: 'Premium Wireless Headphones',
-            price: 129.99,
-            soldCount: 245,
-            imageUrl: 'headphones',
-            status: 'active',
-            createdAt: '2024-01-15',
-            stock: 45,
-        },
-        {
-            id: '2',
-            title: 'USB-C Fast Charging Cable',
-            price: 24.99,
-            soldCount: 1203,
-            imageUrl: 'cable',
-            status: 'active',
-            createdAt: '2024-01-10',
-            stock: 120,
-        },
-        {
-            id: '3',
-            title: 'Laptop Stand - Adjustable',
-            price: 49.99,
-            soldCount: 89,
-            imageUrl: 'stand',
-            status: 'inactive',
-            createdAt: '2024-01-05',
-            stock: 0,
-        },
-        {
-            id: '4',
-            title: 'Mechanical Keyboard RGB',
-            price: 189.99,
-            soldCount: 156,
-            imageUrl: 'keyboard',
-            status: 'active',
-            createdAt: '2024-01-12',
-            stock: 32,
-        },
-    ];
+    // const sellerProducts: ProductProps[] = [
+    //     {
+    //         id: '1',
+    //         title: 'Premium Wireless Headphones',
+    //         price: 129.99,
+    //         soldCount: 245,
+    //         imageUrl: 'headphones',
+    //         status: 'active',
+    //         createdAt: '2024-01-15',
+    //         stock: 45,
+    //     },
+    // ];
 
     const filteredProducts = sellerProducts.filter((product) => {
         const matchesSearch =
             product.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            product.id.includes(searchTerm);
+            product.description.toLowerCase().includes(searchTerm.toLowerCase());
         const matchesFilter =
             filterStatus === 'all' || product.status === filterStatus;
         return matchesSearch && matchesFilter;
     });
 
     const totalRevenue = filteredProducts.reduce(
-        (sum, product) => sum + product.price * product.soldCount,
+        (sum, product) => sum + product.basePrice * product.soldCount,
         0
     );
     const totalSold = filteredProducts.reduce(
@@ -74,16 +47,32 @@ const SellPage = () => {
         0
     );
 
-
     // Add product handler function
-    const handleAddProduct = async (formData: ProductFormData) => {
-        // Validate form data before sending to API
+    const handleAddProduct = async (formData: FormData) => {
+        setIsLoading(true);
 
+        try {
+            const res = await api.post("/products/add", formData, { withCredentials: true });
+            const data = res.data;
+            if (data.success) {
+                const newProduct = data.data as ProductProps;
+                toast.success(data.message || "Product added successfully!");
 
-        const res = await api.post("/products/add", formData, { withCredentials: true });
+                setSellerProducts(prevProducts => [...prevProducts, newProduct]);
+
+                setIsAddProductPopupOpen(false);
+
+            } else {
+                toast.error(data.message || "Failed to add product. Please try again later.");
+            }
+        } catch (error) {
+            // API interceptor handles response errors. don't need to handle it here
+        } finally {
+            setIsLoading(false);
+        }
     }
 
-    
+
     return (
         <div className="min-h-screen bg-linear-to-br from-slate-50 to-slate-100 p-4 md:p-8">
             {/* Header Section */}
@@ -97,9 +86,9 @@ const SellPage = () => {
                             Manage and track your selling products
                         </p>
                     </div>
-                    <button 
-                    className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors shadow-md hover:shadow-lg"
-                    onClick={() => setIsAddProductPopupOpen(true)}
+                    <button
+                        className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors shadow-md hover:shadow-lg"
+                        onClick={() => setIsAddProductPopupOpen(true)}
                     >
                         <Plus size={20} />
                         Add New Product
@@ -123,7 +112,7 @@ const SellPage = () => {
                         iconBg='bg-green-100'
                     />
 
-                     <SellerStatusCard
+                    <SellerStatusCard
                         title="Total Revenue"
                         count={totalRevenue.toFixed(2)}
                         icon={<DollarSign className="text-purple-600" size={24} />}
@@ -194,7 +183,7 @@ const SellPage = () => {
                             </thead>
                             <tbody className="divide-y divide-slate-200">
                                 {filteredProducts.map((product) => (
-                                    <SellerProductRow key={product.id} product={product} />
+                                    <SellerProductRow key={product._id} product={product} />
                                 ))}
                             </tbody>
                         </table>
@@ -214,7 +203,9 @@ const SellPage = () => {
                             ? 'Try adjusting your search or filter criteria'
                             : 'Start by adding your first product'}
                     </p>
-                    <button className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+                    <button 
+                    className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+                    onClick={() => setIsAddProductPopupOpen(true)}>
                         <Plus size={20} />
                         Add Your First Product
                     </button>
@@ -225,6 +216,7 @@ const SellPage = () => {
                 isOpen={isAddProductPopupOpen}
                 onClose={() => setIsAddProductPopupOpen(false)}
                 onSubmit={handleAddProduct}
+                isLoading={isLoading}
             />
         </div>
     );
