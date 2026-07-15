@@ -131,17 +131,6 @@ declare type ShippingAddress = {
     isDefault?: boolean
 }
 
-declare type ProductProps = {
-    id: string,
-    title: string,
-    price: number,
-    soldCount: number,
-    imageUrl: string,
-    status: "active" | "inactive",
-    createdAt: string,
-    stock: number,
-}
-
 declare type AddressFormData = {
     addressLine1: string;
     addressLine2: string;
@@ -150,6 +139,7 @@ declare type AddressFormData = {
     country: string;
 }
 
+// Product Form Data type for adding new products
 type ProductFormData = {
     images: (string | null)[];
     title: string;
@@ -161,4 +151,24 @@ type ProductFormData = {
     attributes: {key: string; value: string}[];
     stock: number;
     shippingAmount: number;
+}
+
+// Product props for response after adding a new product
+type ProductProps = {
+    _id: string;
+    imageUrls: (string | null)[];
+    title: string;
+    description: string;
+    basePrice: number;
+    discountType: "none" | "percentage" | "fixed";
+    discountValue: number;
+    category: string;
+    attributes: {key: string; value: string}[];
+    stock: number;
+    shippingAmount: number;
+    soldCount: number;
+    status: "active" | "inactive"
+    userId: string;
+    createdAt: Date;
+    updatedAt: Date;
 }

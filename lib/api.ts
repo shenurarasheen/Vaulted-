@@ -10,9 +10,21 @@ export interface ApiResponse<T = unknown> {
 
 const api = axios.create({
     baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3001/api/v1",
-    headers: {
-        "Content-Type": "application/json"
+});
+
+api.interceptors.request.use((config) => {
+    if (config.data instanceof FormData) {
+        if (config.headers) {
+            delete config.headers["Content-Type"];
+            delete config.headers["content-type"];
+        }
+    } else {
+        if (config.headers) {
+            config.headers["Content-Type"] = "application/json";
+        }
     }
+
+    return config;
 });
 
 api.interceptors.response.use(

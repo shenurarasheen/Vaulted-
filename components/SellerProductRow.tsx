@@ -1,6 +1,8 @@
+"use client";
+
 import { Edit2, Eye, Trash2 } from "lucide-react";
 
-const SellerProductRow = ({ product }: { product: ProductProps }) => {
+const SellerProductRow = ({ product, onView }: { product: ProductProps; onView: (product: ProductProps) => void }) => {
 
     const getPlaceholderEmoji = (type: string) => {
         const emojis: { [key: string]: string } = {
@@ -25,21 +27,21 @@ const SellerProductRow = ({ product }: { product: ProductProps }) => {
     return (
         <>
             <tr
-                key={product.id}
+                key={product._id}
                 className="hover:bg-slate-50 transition-colors"
             >
                 {/* Product Info */}
                 <td className="px-6 py-4 w-80">
                     <div className="flex items-center gap-3">
-                        <div className={`relative w-12 h-12 rounded-lg flex items-center justify-center text-lg shrink-0 ${getPlaceholderColor(product.imageUrl).bg}`}>
-                            {getPlaceholderEmoji(product.imageUrl)}
+                        <div className={`relative w-12 h-12 rounded-lg flex items-center justify-center text-lg shrink-0 ${getPlaceholderColor(product.category).bg}`}>
+                            {getPlaceholderEmoji(product.category)}
                         </div>
                         <div className="min-w-0 flex-1">
                             <p className="text-sm font-medium text-slate-900 truncate">
                                 {product.title}
                             </p>
                             <p className="text-xs text-slate-500">
-                                ID: {product.id}
+                                ID: {product._id}
                             </p>
                         </div>
                     </div>
@@ -48,7 +50,7 @@ const SellerProductRow = ({ product }: { product: ProductProps }) => {
                 {/* Price */}
                 <td className="px-6 py-4 w-28">
                     <p className="text-sm font-semibold text-slate-900">
-                        ${product.price.toFixed(2)}
+                        ${product.basePrice.toFixed(2)}
                     </p>
                 </td>
 
@@ -107,6 +109,7 @@ const SellerProductRow = ({ product }: { product: ProductProps }) => {
                         <button
                             title="View"
                             className="p-2 hover:bg-blue-50 rounded-lg text-blue-600 hover:text-blue-700 transition-colors"
+                            onClick={() => onView(product)}
                         >
                             <Eye size={18} />
                         </button>

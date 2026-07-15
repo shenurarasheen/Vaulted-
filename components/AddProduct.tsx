@@ -1,4 +1,4 @@
-import { ImagePlus, X } from "lucide-react";
+import { ImagePlus, LoaderCircle, X } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 
@@ -7,14 +7,16 @@ type DiscountType = "none" | "percentage" | "fixed";
 type AddProductPopupProps = {
     isOpen: boolean;
     onClose: () => void;
-    onSubmit: (formData: ProductFormData) => void | Promise<void>;
+    onSubmit: (formData: FormData) => void | Promise<void>;
     initialData?: ProductFormData;
+    isLoading: boolean;
 }
 
 const NUMERIC_FIELDS = ["basePrice", "stock", "shippingAmount", "discountValue"] as const;
 
-const AddProductPopup = ({ isOpen, onClose, onSubmit, initialData }: AddProductPopupProps) => {
+const AddProductPopup = ({ isOpen, onClose, onSubmit, initialData, isLoading }: AddProductPopupProps) => {
     const [images, setImages] = useState<(string | null)[]>([null, null, null, null]);
+    const [imageFiles, setImageFiles] = useState<(File | null)[]>([null, null, null, null]);
     const [formData, setFormData] = useState<ProductFormData>({
         images: [null, null, null, null],
         title: "",
@@ -87,16 +89,31 @@ const AddProductPopup = ({ isOpen, onClose, onSubmit, initialData }: AddProductP
     const handleImageUpload = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
+
+        setImageFiles((prev) => {
+            const next = [...prev];
+            next[index] = file;
+            return next;
+        });
+
         const url = URL.createObjectURL(file);
         setImages((prev) => {
             const next = [...prev];
             next[index] = url;
             return next;
         });
+
         setErrors((prev) => ({ ...prev, images: undefined }));
     };
 
     const removeImage = (index: number) => {
+
+        setImageFiles((prev) => {
+            const next = [...prev];
+            next[index] = null;
+            return next;
+        });
+
         setImages((prev) => {
             const next = [...prev];
             next[index] = null;
@@ -128,17 +145,35 @@ const AddProductPopup = ({ isOpen, onClose, onSubmit, initialData }: AddProductP
         setErrors((prev) => ({ ...prev, attributes: undefined }));
     };
 
+    // Need to append data to a FormData object before send
     const handleSubmit = () => {
         if (!validateForm()) {
             return;
         }
-        const payload: ProductFormData = {
-            ...formData,
-            images,
-            discountValue: formData.discountType === "none" ? 0 : formData.discountValue,
-            attributes: formData.attributes.filter((a) => a.key.trim() !== ""),
-        };
-        onSubmit(payload);
+
+        const productFormData = new FormData();
+        // Append image files to FormData
+        imageFiles.forEach((file) => {
+            if (file && file instanceof File) {
+                productFormData.append("images", file as File);
+            }
+        });
+
+        const cleanedAttributes = formData.attributes.filter((a) => a.key.trim() !== "");
+        productFormData.append("attributes", JSON.stringify(cleanedAttributes));
+
+        productFormData.append("title", formData.title);
+        productFormData.append("description", formData.description);
+        productFormData.append("basePrice", String(formData.basePrice));
+        productFormData.append("discountType", formData.discountType);
+        productFormData.append("discountValue", String(formData.discountType === "none" ? 0 : formData.discountValue));
+        productFormData.append("category", formData.category);
+        productFormData.append("stock", String(formData.stock));
+        productFormData.append("shippingAmount", String(formData.shippingAmount));
+
+        console.log("Submitting product form data:", productFormData.getAll("images"), productFormData.get("attributes"), productFormData.get("title"), productFormData.get("description"), productFormData.get("basePrice"), productFormData.get("discountType"), productFormData.get("discountValue"), productFormData.get("category"), productFormData.get("stock"), productFormData.get("shippingAmount"));
+
+        onSubmit(productFormData);
     };
 
     // If isOpen false, then return null to close the popup
@@ -435,14 +470,20 @@ const AddProductPopup = ({ isOpen, onClose, onSubmit, initialData }: AddProductP
                     <button
                         onClick={onClose}
                         className="px-5 py-2 rounded-xl border border-gray-200 text-gray-700 font-medium text-sm hover:bg-gray-50 transition-colors"
+                        disabled={isLoading}
                     >
                         Cancel
                     </button>
                     <button
                         onClick={handleSubmit}
-                        className="px-5 py-2 rounded-xl bg-gray-900 text-white font-medium text-sm hover:bg-gray-800 transition-colors"
+                        className={`px-5 py-2 rounded-xl text-white font-medium text-sm transition-colors ${isLoading ? "bg-gray-600" : "bg-gray-900 hover:bg-gray-800"}`}
                     >
-                        Add product
+                        { isLoading ? (
+                            <span className="flex items-center gap-2">
+                                <LoaderCircle size={16} className="animate-spin" />
+                                Adding...
+                            </span>
+                        ) : "Add Product"}
                     </button>
                 </div>
             </div>
