@@ -40,7 +40,7 @@ const ProductDetailPopup = ({ product, isOpen, onClose, onDelete }: {
 
     return (
         <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-3xl shadow-2xl w-full max-w-lg max-h-[88vh] overflow-y-auto hide-scrollbar">
+            <div className="bg-white rounded-3xl shadow-2xl w-full max-w-xl max-h-[88vh] overflow-y-auto hide-scrollbar">
 
                 {/* Header */}
                 <div className="sticky top-0 bg-white border-b border-gray-100 px-6 py-3.5 flex items-center justify-between z-10 rounded-t-3xl">

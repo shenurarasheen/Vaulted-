@@ -50,7 +50,7 @@ const SellPage = () => {
                 } else {
                     toast.error(data.message || "Failed to fetch selling products");
                 }
-            } catch (error) {
+            } catch {
                 // API interceptor handles response errors.
             } finally {
                 setIsLoading(false);
@@ -76,7 +76,7 @@ const SellPage = () => {
             } else {
                 toast.error(data.message || "Failed to add product. Please try again later.");
             }
-        } catch (error) {
+        } catch {
             // API interceptor handles response errors. don't need to handle it here
         } finally {
             setIsLoading(false);
@@ -206,6 +206,7 @@ const SellPage = () => {
                                             key={product._id}
                                             product={product}
                                             onView={(selectedProduct) => setSelectedProduct(selectedProduct)}
+                                            openEditPopup={(isEditing: boolean) => setIsAddProductPopupOpen(isEditing)}
                                         />
                                     ))
                                 }
@@ -236,14 +237,18 @@ const SellPage = () => {
                 </div>
             )}
 
-            <AddProductPopup
-                isOpen={isAddProductPopupOpen}
-                onClose={() => setIsAddProductPopupOpen(false)}
-                onSubmit={handleAddProduct}
-                isLoading={isLoading}
-            />
+            {isAddProductPopupOpen && (
+                <AddProductPopup
+                    key={selectedProduct?._id ?? "new"}
+                    isOpen={isAddProductPopupOpen}
+                    onClose={() => {setIsAddProductPopupOpen(false); setSelectedProduct(null)}}
+                    onSubmit={handleAddProduct}
+                    initialData={selectedProduct ? selectedProduct : null}
+                    isLoading={isLoading}
+                />
+            )}
 
-            {selectedProduct && (
+            {(selectedProduct && !isAddProductPopupOpen) && (
                 <ProductDetailPopup
                     product={selectedProduct}
                     isOpen={selectedProduct !== null}
