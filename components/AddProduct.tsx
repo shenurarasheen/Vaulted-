@@ -1,3 +1,5 @@
+"use client";
+
 import { ImagePlus, LoaderCircle, X } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
@@ -8,27 +10,54 @@ type AddProductPopupProps = {
     isOpen: boolean;
     onClose: () => void;
     onSubmit: (formData: FormData) => void | Promise<void>;
-    initialData?: ProductFormData;
+    initialData?: ProductProps | null;
     isLoading: boolean;
 }
 
 const NUMERIC_FIELDS = ["basePrice", "stock", "shippingAmount", "discountValue"] as const;
+const CLOUDINARY_BASE_URL = process.env.NEXT_PUBLIC_CLOUDINARY_BASE_URL;
+const EMPTY_IMAGES = [null, null, null, null] as const;
+
+const createEmptyFormData = (): ProductFormData => ({
+    images: [...EMPTY_IMAGES],
+    title: "",
+    description: "",
+    basePrice: 0,
+    discountType: "none",
+    discountValue: 0,
+    category: "",
+    attributes: [{ key: "", value: "" }],
+    stock: 0,
+    shippingAmount: 0,
+});
+
+const normalizeImages = (images?: (string | null)[]) => {
+    const nextImages = [...(images?.slice(0, 4) ?? []), ...EMPTY_IMAGES];
+    return nextImages.slice(0, 4);
+};
+
+const createInitialFormData = (initialData?: ProductProps | null): ProductFormData => {
+    if (!initialData) {
+        return createEmptyFormData();
+    }
+
+    return {
+        images: normalizeImages(initialData.imageUrls),
+        title: initialData.title,
+        description: initialData.description,
+        basePrice: initialData.basePrice,
+        discountType: initialData.discountType,
+        discountValue: initialData.discountValue,
+        category: initialData.category,
+        attributes: initialData.attributes.length > 0 ? initialData.attributes : [{ key: "", value: "" }],
+        stock: initialData.stock,
+        shippingAmount: initialData.shippingAmount,
+    };
+};
 
 const AddProductPopup = ({ isOpen, onClose, onSubmit, initialData, isLoading }: AddProductPopupProps) => {
-    const [images, setImages] = useState<(string | null)[]>([null, null, null, null]);
     const [imageFiles, setImageFiles] = useState<(File | null)[]>([null, null, null, null]);
-    const [formData, setFormData] = useState<ProductFormData>({
-        images: [null, null, null, null],
-        title: "",
-        description: "",
-        basePrice: 0,
-        discountType: "none",
-        discountValue: 0,
-        category: "",
-        attributes: [{ key: "", value: "" }],
-        stock: 0,
-        shippingAmount: 0,
-    });
+    const [formData, setFormData] = useState<ProductFormData>(() => createInitialFormData(initialData));
 
     // Field-level error messages keyed by ProductFormData field
     const [errors, setErrors] = useState<Partial<Record<keyof ProductFormData, string>>>({});
@@ -48,7 +77,7 @@ const AddProductPopup = ({ isOpen, onClose, onSubmit, initialData, isLoading }: 
     const validateForm = (): boolean => {
         const newErrors: Partial<Record<keyof ProductFormData, string>> = {};
 
-        const isInvalidateImages = images.some((img) => img === null);
+        const isInvalidateImages = formData.images.some((img) => img === null);
         if (isInvalidateImages) {
             newErrors.images = "All 4 images are required.";
         }
@@ -97,11 +126,10 @@ const AddProductPopup = ({ isOpen, onClose, onSubmit, initialData, isLoading }: 
         });
 
         const url = URL.createObjectURL(file);
-        setImages((prev) => {
-            const next = [...prev];
-            next[index] = url;
-            return next;
-        });
+        setFormData((prev) => ({
+            ...prev,
+            images: prev.images.map((image, imageIndex) => (imageIndex === index ? url : image)),
+        }));
 
         setErrors((prev) => ({ ...prev, images: undefined }));
     };
@@ -114,11 +142,10 @@ const AddProductPopup = ({ isOpen, onClose, onSubmit, initialData, isLoading }: 
             return next;
         });
 
-        setImages((prev) => {
-            const next = [...prev];
-            next[index] = null;
-            return next;
-        });
+        setFormData((prev) => ({
+            ...prev,
+            images: prev.images.map((image, imageIndex) => (imageIndex === index ? null : image)),
+        }));
     };
 
     const addAttribute = () => {
@@ -206,12 +233,12 @@ const AddProductPopup = ({ isOpen, onClose, onSubmit, initialData, isLoading }: 
                         </label>
 
                         <div className="grid grid-cols-4 gap-2">
-                            {images.map((img, i) => (
+                            {formData.images.map((img, i) => (
                                 <div key={i} className="relative aspect-square">
                                     {img ? (
                                         <>
                                             <Image
-                                                src={img}
+                                                src={img.startsWith("blob:") ? img : `${CLOUDINARY_BASE_URL}/${img}`}
                                                 width={100}
                                                 height={100}
                                                 alt={`Product ${i + 1}`}
@@ -481,9 +508,9 @@ const AddProductPopup = ({ isOpen, onClose, onSubmit, initialData, isLoading }: 
                         { isLoading ? (
                             <span className="flex items-center gap-2">
                                 <LoaderCircle size={16} className="animate-spin" />
-                                Adding...
+                                {initialData ? "Updating..." : "Adding..."}
                             </span>
-                        ) : "Add Product"}
+                        ) : initialData ? "Update Product" : "Add Product"}
                     </button>
                 </div>
             </div>

@@ -2,24 +2,26 @@
 
 import { Edit2, Eye, Trash2 } from "lucide-react";
 
-const SellerProductRow = ({ product, onView }: { product: ProductProps; onView: (product: ProductProps) => void }) => {
+const SellerProductRow = ({ product, onView, openEditPopup }: { product: ProductProps; onView: (product: ProductProps) => void; openEditPopup: (isEditing: boolean) => void }) => {
 
     const getPlaceholderEmoji = (type: string) => {
         const emojis: { [key: string]: string } = {
-            headphones: '🎧',
-            cable: '🔌',
-            stand: '📱',
-            keyboard: '⌨️',
+            electronics: '📱',
+            apparel: '👕',
+            home: '🏠',
+            beauty: '💄',
+            sports: '⚽',
         };
         return emojis[type] || '📦';
     };
 
     const getPlaceholderColor = (type: string) => {
         const colors: { [key: string]: { bg: string; text: string } } = {
-            headphones: { bg: 'bg-blue-100', text: 'text-blue-600' },
-            cable: { bg: 'bg-green-100', text: 'text-green-600' },
-            stand: { bg: 'bg-amber-100', text: 'text-amber-600' },
-            keyboard: { bg: 'bg-purple-100', text: 'text-purple-600' },
+            electronics: { bg: 'bg-blue-100', text: 'text-blue-600' },
+            apparel: { bg: 'bg-green-100', text: 'text-green-600' },
+            home: { bg: 'bg-amber-100', text: 'text-amber-600' },
+            beauty: { bg: 'bg-purple-100', text: 'text-purple-600' },
+            sports: { bg: 'bg-orange-100', text: 'text-orange-600' },
         };
         return colors[type] || { bg: 'bg-slate-200', text: 'text-slate-600' };
     };
@@ -116,6 +118,10 @@ const SellerProductRow = ({ product, onView }: { product: ProductProps; onView: 
                         <button
                             title="Edit"
                             className="p-2 hover:bg-amber-50 rounded-lg text-amber-600 hover:text-amber-700 transition-colors"
+                            onClick={() => {
+                                onView(product);
+                                openEditPopup(true);
+                            }}
                         >
                             <Edit2 size={18} />
                         </button>
