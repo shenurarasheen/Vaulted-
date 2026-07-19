@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useState } from "react";
 
 const CATEGORY_LABELS: Record<string, string> = {
     electronics: "Electronics",
@@ -18,6 +19,8 @@ const ProductDetailPopup = ({ product, isOpen, onClose, onDelete }: {
     onClose: () => void;
     onDelete: () => void;
 }) => {
+    const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+
     const finalPrice = (() => {
         if (product.discountType === "percentage") {
             return product.basePrice * (1 - product.discountValue / 100);
@@ -35,6 +38,10 @@ const ProductDetailPopup = ({ product, isOpen, onClose, onDelete }: {
         : `$${product.discountValue.toFixed(2)} off`;
 
     const validImages = product.imageUrls?.map((imgUrl) => `${CLOUDINARY_BASE_URL}/${imgUrl}`);
+
+    const changeImageOnClick = (index: number) => {
+        setSelectedImageIndex(index);
+    }
 
     if (!isOpen) return null;
 
@@ -68,9 +75,9 @@ const ProductDetailPopup = ({ product, isOpen, onClose, onDelete }: {
                     {/* Image grid */}
                     <div className="grid grid-cols-4 gap-2 pt-5">
                         <div className="relative col-span-2 row-span-2 aspect-square rounded-2xl overflow-hidden bg-green-50">
-                            {validImages[0] ? (
+                            {validImages[selectedImageIndex] ? (
                                 <Image
-                                    src={validImages[0]}
+                                    src={validImages[selectedImageIndex]}
                                     alt={product.title}
                                     fill
                                     className="w-full h-full object-cover"
@@ -87,8 +94,9 @@ const ProductDetailPopup = ({ product, isOpen, onClose, onDelete }: {
                                     <Image
                                         src={validImages[i]}
                                         alt={`${product.title} ${i + 1}`}
+                                        onClick={() => changeImageOnClick(i)}
                                         fill
-                                        className="w-full h-full object-cover"
+                                        className="w-full h-full object-cover cursor-pointer"
                                     />
                                 ) : (
                                     <svg className="w-5 h-5 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>

@@ -83,6 +83,41 @@ const SellPage = () => {
         }
     }
 
+
+    // Update product handler function
+    const handleUpdateProduct = async (formData: FormData, productId?: string) => {
+        if (!productId) {
+            toast.error("Missing product ID for update.");
+            return;
+        }
+
+        setIsLoading(true);
+        try {
+            const res = await api.put(`/products/update/${productId}`, formData, { withCredentials: true });
+            const data = res.data;
+            if (data.success) {
+                const updatedProduct = data.data as ProductProps;
+
+                setSellerProducts(prevProducts => prevProducts.map(product => (
+                    product._id === updatedProduct._id ? updatedProduct : product
+                )));
+
+                setIsAddProductPopupOpen(false);
+                
+                setSelectedProduct(null);
+
+                toast.success(data.message || "Product updated successfully!");
+            } else {
+                toast.error(data.message || "Failed to update product. Please try again later.");
+            }
+        } catch {
+            // API interceptor handles response errors. don't need to handle it here
+        } finally {
+            setIsLoading(false);
+        }
+    }
+
+
     return (
         <div className="min-h-screen bg-linear-to-br from-slate-50 to-slate-100 p-4 md:p-8">
             {/* Header Section */}
@@ -242,7 +277,7 @@ const SellPage = () => {
                     key={selectedProduct?._id ?? "new"}
                     isOpen={isAddProductPopupOpen}
                     onClose={() => {setIsAddProductPopupOpen(false); setSelectedProduct(null)}}
-                    onSubmit={handleAddProduct}
+                    onSubmit={selectedProduct ? handleUpdateProduct : handleAddProduct}
                     initialData={selectedProduct ? selectedProduct : null}
                     isLoading={isLoading}
                 />

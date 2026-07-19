@@ -9,7 +9,7 @@ type DiscountType = "none" | "percentage" | "fixed";
 type AddProductPopupProps = {
     isOpen: boolean;
     onClose: () => void;
-    onSubmit: (formData: FormData) => void | Promise<void>;
+    onSubmit: (formData: FormData, productId?: string) => void | Promise<void>;
     initialData?: ProductProps | null;
     isLoading: boolean;
 }
@@ -198,9 +198,11 @@ const AddProductPopup = ({ isOpen, onClose, onSubmit, initialData, isLoading }: 
         productFormData.append("stock", String(formData.stock));
         productFormData.append("shippingAmount", String(formData.shippingAmount));
 
-        console.log("Submitting product form data:", productFormData.getAll("images"), productFormData.get("attributes"), productFormData.get("title"), productFormData.get("description"), productFormData.get("basePrice"), productFormData.get("discountType"), productFormData.get("discountValue"), productFormData.get("category"), productFormData.get("stock"), productFormData.get("shippingAmount"));
+        if (initialData) {
+            productFormData.append("imageUrls", JSON.stringify(initialData.imageUrls));
+        }
 
-        onSubmit(productFormData);
+        onSubmit(productFormData, initialData?._id);
     };
 
     // If isOpen false, then return null to close the popup
@@ -505,7 +507,7 @@ const AddProductPopup = ({ isOpen, onClose, onSubmit, initialData, isLoading }: 
                         onClick={handleSubmit}
                         className={`px-5 py-2 rounded-xl text-white font-medium text-sm transition-colors ${isLoading ? "bg-gray-600" : "bg-gray-900 hover:bg-gray-800"}`}
                     >
-                        { isLoading ? (
+                        {isLoading ? (
                             <span className="flex items-center gap-2">
                                 <LoaderCircle size={16} className="animate-spin" />
                                 {initialData ? "Updating..." : "Adding..."}
