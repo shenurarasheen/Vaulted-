@@ -4,7 +4,7 @@ import Image from "next/image"
 const AdvProductCard = ({ title, desc, price, soldCount, src, alt, shippingCost=0 }: ProductCardProps) => {
     return (
         <div className="cursor-pointer">
-            <div className="relative h-42 max-sm:h-40 bg-gray-100 rounded-lg overflow-hidden">
+            <div className="relative h-46 max-sm:h-40 bg-gray-100 rounded-lg overflow-hidden">
                 <Image
                     src={src}
                     alt={alt}
