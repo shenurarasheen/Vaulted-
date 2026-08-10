@@ -40,10 +40,12 @@ const SellPage = () => {
         const fetchSellerProducts = async () => {
             setIsLoading(true);
             try {
-                const res = await api.get("/products/get-all", { withCredentials: true });
+                const res = await api.get("/products/get-seller-products", { withCredentials: true });
                 const data = res.data;
                 if (data.success) {
                     const sellerProducts = data.data as ProductProps[];
+
+                    console.log("Fetched seller products:", sellerProducts);
                     
                     setSellerProducts(sellerProducts);
 

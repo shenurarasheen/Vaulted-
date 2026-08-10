@@ -35,18 +35,6 @@ interface SearchFilters {
     sortBy: string;
 }
 
-type SearchFilterState = {
-    searchOptions: string[];
-    categories: string[];
-    minPrice: number;
-    maxPrice: number;
-    sellerType: string;
-    authorizedSeller: boolean;
-    deliveryOptions: string[];
-    listedIn: string;
-    sortBy: string;
-};
-
 const Section = ({ title, children }: { title: string; children: React.ReactNode }) => (
     <div className="px-4 py-3 flex flex-col gap-2.5">
         <p className="text-[14px] font-semibold text-gray-800">{title}</p>
@@ -105,23 +93,21 @@ const createInitialFilters = () => ({
     sortBy: "",
 });
 
-const AdvNavBar = () => {
+const createInitialFilterState = () => ({
+    searchOptions: [],
+    categories: [],
+    minPrice: 0,
+    maxPrice: 0,
+    sellerType: "",
+    authorizedSeller: false,
+    deliveryOptions: [],
+    listedIn: "",
+    sortBy: ""
+});
+
+const AdvNavBar = ({handleFilterChange, isLoading}: {handleFilterChange: (searchData: SearchData) => Promise<void>; isLoading: boolean}) => {
     const [filters, setFilters] = useState<SearchFilters>(() => createInitialFilters());
-    const [searchFilterState, setSearchFilterState] = useState<SearchFilterState>({
-        searchOptions: [],
-        categories: [],
-        minPrice: 0,
-        maxPrice: 0,
-        sellerType: "",
-        authorizedSeller: false,
-        deliveryOptions: [],
-        listedIn: "",
-        sortBy: ""
-    });
-
-    const handleFilterChange = () => {
-
-    }
+    const [searchFilterState, setSearchFilterState] = useState<SearchData>(() => createInitialFilterState());
 
     const toggle = <
         K extends "searchOptions" | "categories" | "deliveryOptions",
@@ -151,25 +137,22 @@ const AdvNavBar = () => {
     }
 
     const toggleSingle = (key: keyof SearchFilters) => {
-
         setFilters((prev) => ({
             ...prev,
             [key]: !prev[key]
         }));
-
         setSearchFilterState((prev) => ({
             ...prev,
             [key]: !prev[key]
         }));
-
     }
-
-    console.log("Filtered state: ", searchFilterState);
 
     const set = (key: keyof SearchFilters, value: string) => {
         setFilters((prev) => ({ ...prev, [key]: value }));
         setSearchFilterState((prev) => ({ ...prev, [key]: value }));
     }
+
+    console.log("Filtered State: ", searchFilterState);
 
     const inputCls = "w-full px-2.5 py-1.5 text-[13.5px] border border-gray-200 rounded-lg bg-gray-50 focus:bg-white focus:border-blue-300 focus:ring-1 focus:ring-blue-100 outline-none transition-all text-gray-700 placeholder-gray-300";
     void inputCls;
@@ -245,10 +228,10 @@ const AdvNavBar = () => {
                         <p className="text-[12px] text-gray-400 mb-1.5">Listed in</p>
                         <select value={filters.listedIn} onChange={(e) => set("listedIn", e.target.value)} className={selectCls}>
                             <option value="">Any time</option>
-                            <option value="1">Last 24 hours</option>
-                            <option value="3">Last 3 days</option>
-                            <option value="7">Last 7 days</option>
-                            <option value="30">Last 30 days</option>
+                            <option value="24h">Last 24 hours</option>
+                            <option value="3d">Last 3 days</option>
+                            <option value="7d">Last 7 days</option>
+                            <option value="30d">Last 30 days</option>
                         </select>
                     </div>
                 </Section>
@@ -269,12 +252,19 @@ const AdvNavBar = () => {
 
             <div className="flex gap-2 mt-3 px-0.5">
                 <button
-                    onClick={() => setFilters(() => createInitialFilters())}
                     className="flex-1 py-2 rounded-xl border border-gray-200 text-[13px] font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-700 active:scale-[0.98] transition-all"
+                onClick={() => {
+                    setSearchFilterState(() => createInitialFilterState());
+                    setFilters(() => createInitialFilters());
+                    handleFilterChange(createInitialFilterState());
+                }}
                 >
                     Reset
                 </button>
-                <button className="flex-2 px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 active:scale-[0.98] text-white text-[13px] font-medium flex items-center justify-center gap-1.5 transition-all">
+                <button
+                    className="flex-2 px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 active:scale-[0.98] text-white text-[13px] font-medium flex items-center justify-center gap-1.5 transition-all"
+                    onClick={() => handleFilterChange(searchFilterState)}
+                >
                     <Search className="w-4 h-4" />
                     Search
                 </button>

@@ -172,3 +172,15 @@ type ProductProps = {
     createdAt: Date;
     updatedAt: Date;
 }
+
+type SearchData = {
+    searchOptions: string[];
+    categories: string[];
+    minPrice: number;
+    maxPrice: number;
+    sellerType: string;
+    authorizedSeller: boolean;
+    deliveryOptions: string[];
+    listedIn: string;
+    sortBy: string;
+}
