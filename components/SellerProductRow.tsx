@@ -125,12 +125,6 @@ const SellerProductRow = ({ product, onView, openEditPopup }: { product: Product
                         >
                             <Edit2 size={18} />
                         </button>
-                        <button
-                            title="Delete"
-                            className="p-2 hover:bg-red-50 rounded-lg text-red-600 hover:text-red-700 transition-colors"
-                        >
-                            <Trash2 size={18} />
-                        </button>
                     </div>
                 </td>
             </tr>

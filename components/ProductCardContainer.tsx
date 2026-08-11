@@ -13,7 +13,7 @@ const ProductCardContainer = ({ products }: ProductCardContainerProps) => {
                     desc={product.description}
                     price={`$${product.price.toFixed(2)}`}
                     soldCount={product.soldCount}
-                    shippingCost={product.shippingAmount!}
+                    shippingCost={product.shippingAmount ?? 0}
                     src={product.src}
                     alt={product.title}
                 />
