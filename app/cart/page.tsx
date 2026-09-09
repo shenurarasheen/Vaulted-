@@ -1,14 +1,36 @@
-import Button from "@/components/Button";
-import CartCard from "@/components/CartCard";
+import { cookies } from "next/headers";
 import Navbar from "@/components/Navbar";
-import PaginationBar from "@/components/Pagination";
-import PriceDetailsSection from "@/components/PriceDetailsSection";
-import { CircleAlert, ShieldAlert } from "lucide-react";
+import CartContent from "@/components/CartContent";
 import Link from "next/link";
-import products from "@/data/products.json";
 import Footer from "@/components/Footer";
+import api from "@/lib/api";
+import toast from "react-hot-toast";
 
-const CartPage = () => {
+const CartPage = async () => {
+
+    const getAllCartItems = async (): Promise<CartItemProps[]> => {
+
+        const cookieStore = await cookies();
+
+        try {
+            const res = await api.get("cart/all", {
+                headers: {
+                    Cookie: cookieStore.toString()
+                }
+            });
+            const data = res.data;
+            if (data.success) {
+                return data.data as CartItemProps[];
+            }
+            toast.error(data.message || "Failed to fetch cart items.");
+        } catch {
+
+        }
+        return [];
+    }
+
+    const cartItems = await getAllCartItems();
+
     return (
         <>
             <Navbar />
@@ -18,27 +40,9 @@ const CartPage = () => {
                     <Link href="/" className="text-xs text-blue-600 underline">Send Us Your Comments</Link>
                 </div>
 
-                <div className="w-full flex md:flex-row flex-col gap-3 mt-2">
-                    {/* for cart items */}
-                    <div className="md:w-2/3 w-full space-y-2 mb-6">
-                        <CartCard product={products[0]} />
-                        <CartCard product={products[1]} />
-                        <CartCard product={products[2]} />
-                        <div className="w-full flex justify-end mt-10">
-                            <PaginationBar />
-                        </div>
-                    </div>
-                    {/* for price details */}
-                    <div className="md:w-1/3 w-full">
-                        <PriceDetailsSection
-                            itemsQty={2}
-                            itemsPrice={1534}
-                            shippingCost={20}
-                        />
-                    </div>
-                </div>
+                <CartContent cartItems={cartItems} />
             </main>
-            <Footer/>
+            <Footer />
         </>
     )
 }
