@@ -88,6 +88,7 @@ declare type PriceDetailsSectionProps = {
     itemsQty: number;
     itemsPrice: number;
     shippingCost: number;
+    subTotal: number;
 }
 
 declare type ProductDetailsPageProps = {
@@ -154,7 +155,7 @@ type ProductFormData = {
 }
 
 // Product props for response after adding a new product
-type ProductProps = {
+declare type ProductProps = {
     _id: string;
     imageUrls: (string | null)[];
     title: string;
@@ -173,7 +174,7 @@ type ProductProps = {
     updatedAt: Date;
 }
 
-type SearchData = {
+declare type SearchData = {
     searchOptions: string[];
     categories: string[];
     minPrice: number;
@@ -184,3 +185,32 @@ type SearchData = {
     listedIn: string;
     sortBy: string;
 }
+
+declare type CartItemProps = {
+    _id: string;
+    userId: string;
+    productId: ProductProps;
+    quantity: number;
+    createdAt: string;
+    updatedAt: string;
+}
+
+declare type PriceDetailsProps = {
+    itemsQty: number;
+    itemsPrice: number;
+    shippingCost: number;
+    subTotal: number;
+}
+
+declare type AddressProps = {
+    addressId: string;
+    firstName: string;
+    lastName: string;
+    phone: string;
+    addressLine1: string;
+    addressLine2: string;
+    city: string;
+    postalCode: string;
+    country: string;
+};
+

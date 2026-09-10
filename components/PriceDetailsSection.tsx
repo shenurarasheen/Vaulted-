@@ -1,8 +1,7 @@
 import { CircleAlert, ShieldAlert } from "lucide-react";
 import Button from "./Button";
 
-const PriceDetailsSection = ({itemsQty, itemsPrice, shippingCost} : PriceDetailsSectionProps) => {
-    const subtotal = itemsPrice + shippingCost;
+const PriceDetailsSection = ({itemsQty, itemsPrice, shippingCost, subTotal} : PriceDetailsSectionProps) => {
 
     return (
 
@@ -24,7 +23,7 @@ const PriceDetailsSection = ({itemsQty, itemsPrice, shippingCost} : PriceDetails
 
                     <tr className="flex justify-between items-center">
                         <td className="text-xl font-semibold">Subtotal</td>
-                        <td className="text-xl font-semibold">${subtotal.toFixed(2)}</td>
+                        <td className="text-xl font-semibold">${subTotal.toFixed(2)}</td>
                     </tr>
                 </tbody>
             </table>
