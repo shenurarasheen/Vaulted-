@@ -214,3 +214,8 @@ declare type AddressProps = {
     country: string;
 };
 
+declare type AddressPayload = {
+    permanentAddressId: string;
+    addresses: AddressProps[];
+}
+
