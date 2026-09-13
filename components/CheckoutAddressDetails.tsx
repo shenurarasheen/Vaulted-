@@ -1,14 +1,11 @@
-"use client";
+import { useEffect } from "react";
 
-import { useEffect, useState } from "react";
-
-const CheckoutAddressDetails = ({ permanentAddressId, userAddresses }: { permanentAddressId: string; userAddresses: AddressProps[] }) => {
-    const [selectedAddressId, setSelectedAddressId] = useState("");
+const CheckoutAddressDetails = ({ permanentAddressId, userAddresses, selectedAddress, setSelectedAddress }: { permanentAddressId: string; userAddresses: AddressProps[], selectedAddress: string, setSelectedAddress: (id: string) => void }) => {
 
     useEffect(() => {
         const selectDefaultAddress = () => {
             if (permanentAddressId) {
-                setSelectedAddressId(permanentAddressId);
+                setSelectedAddress(permanentAddressId);
             }
         };
         selectDefaultAddress();
@@ -31,7 +28,7 @@ const CheckoutAddressDetails = ({ permanentAddressId, userAddresses }: { permane
                     {userAddresses.map((address) => (
                         <label
                             key={address.addressId}
-                            className={`flex items-start gap-3 border rounded-lg p-4 cursor-pointer transition-colors ${selectedAddressId === address.addressId
+                            className={`flex items-start gap-3 border rounded-lg p-4 cursor-pointer transition-colors ${selectedAddress === address.addressId
                                 ? "border-blue-600 bg-blue-50/40"
                                 : "border-gray-200 hover:border-gray-300"
                                 }`}
@@ -39,8 +36,8 @@ const CheckoutAddressDetails = ({ permanentAddressId, userAddresses }: { permane
                             <input
                                 type="radio"
                                 name="address"
-                                checked={selectedAddressId === address.addressId}
-                                onChange={() => setSelectedAddressId(address.addressId)}
+                                checked={selectedAddress === address.addressId}
+                                onChange={() => setSelectedAddress(address.addressId)}
                                 className="mt-1 accent-blue-600"
                             />
                             <div className="text-sm">
