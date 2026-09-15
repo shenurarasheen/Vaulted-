@@ -24,7 +24,8 @@ const CheckoutPageContent = ({ permanentAddressId, userAddresses, cartItems, sub
                 const paymentData = await data.data;
 
                 window.payhere.onCompleted = (orderId: string) => {
-                    alert(`Subscription authorization completed for order: ${orderId}`);
+                    //alert(`Subscription authorization completed for order: ${orderId}`);
+                    window.location.assign("/orders")
                 };
 
                 window.payhere.onDismissed = () => {

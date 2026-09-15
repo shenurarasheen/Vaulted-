@@ -1,7 +1,7 @@
 import { CircleAlert, ShieldAlert } from "lucide-react";
 import Button from "./Button";
 
-const PriceDetailsSection = ({itemsQty, itemsPrice, shippingCost, subTotal} : PriceDetailsSectionProps) => {
+const PriceDetailsSection = ({itemsQty, itemsPrice, shippingCost, subTotal, quantities} : PriceDetailsSectionProps) => {
 
     return (
 
@@ -30,6 +30,7 @@ const PriceDetailsSection = ({itemsQty, itemsPrice, shippingCost, subTotal} : Pr
             <Button
                 title="Go to Checkout"
                 className="bg-blue-600 w-full mt-5"
+                url={`/checkout?quantities=${encodeURIComponent(JSON.stringify(quantities))}`}
             />
             <p className="text-xs my-4 flex items-center justify-center gap-1"><ShieldAlert size={20} color="#2563EB" />Purchase protected by <span className="text-xs font-semibold underline">Vaulted Money Back Guarantee</span></p>
         </div>

@@ -99,7 +99,7 @@ const CartContent = ({cartItems}: CartContentProps) => {
                 </div>
             </div>
             <div className="md:w-1/3 w-full">
-                <PriceDetailsSection {...priceDetails} />
+                <PriceDetailsSection {...priceDetails } quantities={quantities} />
             </div>
         </div>
     );
