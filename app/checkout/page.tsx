@@ -4,12 +4,13 @@ import Navbar from "@/components/Navbar";
 import api from "@/lib/api";
 import { calculateActualPrice } from "@/lib/utils";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 const TAX_RATE = 0.08;
 
 const CheckoutPage = async () => {
 
-    const getAllUserAddresses = async (): Promise<AddressPayload> => {
+    const getAllUserAddresses = async (): Promise<AddressPayload | null> => {
         const cookieStore = await cookies();
 
         try {
@@ -23,6 +24,10 @@ const CheckoutPage = async () => {
                 return data.data as AddressPayload;
             }
         } catch (error) {
+            const status = (error as { response?: { status?: number } }).response?.status;
+            if (status === 401 || status === 403) {
+                return null;
+            }
         }
         return { permanentAddressId: "", addresses: [] };
     }
@@ -39,17 +44,25 @@ const CheckoutPage = async () => {
             if (data.success) {
                 return data.data as CartItemProps[];
             }
-        } catch (error) {
+        } catch {
         }
         return [];
     }
 
 
     const addressPayload = await getAllUserAddresses();
+    if (addressPayload === null) {
+        redirect("/profile");
+    }
+
     const permanentAddressId = addressPayload.permanentAddressId;
     const userAddresses = addressPayload.addresses;
 
     const allCartItems = await getOrderItemsFromCart();
+
+    if (allCartItems.length === 0) {
+        redirect("/cart");
+    }
 
     const subtotal = allCartItems.reduce((sum, item) => sum + calculateActualPrice(item.productId.basePrice, item.productId.discountType, item.productId.discountValue) * item.quantity, 0);
     const shipping = allCartItems.length > 0 ? allCartItems.reduce((sum, item) => sum + item.productId.shippingAmount, 0) : 0;

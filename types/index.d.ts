@@ -2,7 +2,7 @@ declare type ButtonProps = {
     title: string;
     textColor?: string;
     className: string;
-    url?: string
+    url?: string;
 }
 
 declare type Category = {
@@ -89,6 +89,7 @@ declare type PriceDetailsSectionProps = {
     itemsPrice: number;
     shippingCost: number;
     subTotal: number;
+    quantities?: Record<string, number>;
 }
 
 declare type ProductDetailsPageProps = {
