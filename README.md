@@ -174,19 +174,25 @@ The frontend will be available at `http://localhost:3000` and the backend API at
 
 ## 📸 Screenshots
 
-> Add screenshots of the web app here.
-
 | Homepage | Product Listing | Product Details |
 |---|---|---|
-| _<!-- screenshot -->_ | _<!-- screenshot -->_ | _<!-- screenshot -->_ |
+| ![Home Page](/assets/v_home.png) | ![Home Page](/assets/v_home2.png) | ![single_product Page](/assets/v_single_product.png) |
 
 | Cart | Checkout | Order History |
 |---|---|---|
-| _<!-- screenshot -->_ | _<!-- screenshot -->_ | _<!-- screenshot -->_ |
+| ![Cart Page](/assets/v_cart.png) | _<!-- screenshot -->_ | ![Order Page](/assets/v_orders.png) |
 
-| Seller Dashboard | Add/Edit Product | AI Assistant |
+| Seller Dashboard | Add/Edit Product | View Selling Product Details |
 |---|---|---|
-| _<!-- screenshot -->_ | _<!-- screenshot -->_ | _<!-- screenshot -->_ |
+| ![Seller Page](/assets/v_add_product.png) | ![Edit Product Popup](/assets/v_edit_product.png) | ![Home Page](/assets/v_selling_product.png) |
+
+| Sign In | Sign Up | Profile |
+|---|---|---|
+| ![Signin Page](/assets/v_signin.png) | ![Signup Page](/assets/v_signup.png) | ![Order Page](/assets/v_profile.png) |
+
+| Payment Details | Advanced Search |
+|---|---|
+| ![Payment Page](/assets/v_payment_details.png) | ![Advance Search Page](/assets/v_adv_search.png) |
 
 ---
 
