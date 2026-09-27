@@ -180,7 +180,7 @@ The frontend will be available at `http://localhost:3000` and the backend API at
 
 | Cart | Checkout | Order History |
 |---|---|---|
-| ![Cart Page](/assets/v_cart.png) | _<!-- screenshot -->_ | ![Order Page](/assets/v_orders.png) |
+| ![Cart Page](/assets/v_cart.png) | ![Checkout Page](/assets/v_checkout.png) | ![Order Page](/assets/v_orders.png) |
 
 | Seller Dashboard | Add/Edit Product | View Selling Product Details |
 |---|---|---|
